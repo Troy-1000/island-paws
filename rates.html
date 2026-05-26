@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rates — Island Paws Dog Care</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:        #FDFBF7;
+      --cream-alt:    #F2EDE3;
+      --forest:       #243D26;
+      --forest-mid:   #3A5E3C;
+      --forest-light: #4E7A51;
+      --amber:        #B07530;
+      --amber-light:  #D4944A;
+      --ink:          #1C1814;
+      --ink-2:        #5C5044;
+      --ink-3:        #9A8B7B;
+      --border:       rgba(36,61,38,0.10);
+      --border-light: rgba(36,61,38,0.05);
+      --ease-spring:  cubic-bezier(0.32, 0.72, 0, 1);
+      --ease-expo:    cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0.028;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+    }
+
+    /* ── NAV ────────────────────────────────────────── */
+    .nav {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 500;
+      width: calc(100% - 48px);
+      max-width: 900px;
+      background: rgba(253,251,247,0.84);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 10px 10px 10px 26px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      transition: box-shadow 0.5s var(--ease-expo);
+    }
+
+    .nav.scrolled { box-shadow: 0 6px 40px rgba(36,61,38,0.12), 0 1px 0 rgba(36,61,38,0.06); }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      color: var(--forest);
+      text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink-2);
+      text-decoration: none;
+      transition: color 0.3s var(--ease-expo);
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover { color: var(--forest); }
+    .nav-links a.active { color: var(--forest); font-weight: 600; }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--forest);
+      color: #fff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 10px 10px 10px 18px;
+      border-radius: 100px;
+      text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: background 0.4s var(--ease-spring), transform 0.4s var(--ease-spring);
+    }
+
+    .nav-cta:hover { background: var(--forest-mid); transform: scale(0.97); }
+
+    .nav-cta .ic {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      transition: transform 0.4s var(--ease-spring);
+    }
+
+    .nav-cta:hover .ic { transform: translateX(2px) translateY(-1px) scale(1.1); }
+
+    .nav-burger {
+      display: none;
+      width: 40px;
+      height: 40px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-burger span {
+      position: absolute;
+      left: 9px;
+      height: 1.5px;
+      background: var(--ink);
+      transition: all 0.45s var(--ease-spring);
+      transform-origin: center;
+    }
+
+    .nav-burger span:first-child { width: 22px; top: 14px; }
+    .nav-burger span:last-child  { width: 15px; top: 22px; }
+    .nav-burger.open span:first-child { width: 20px; top: 18px; transform: rotate(45deg); }
+    .nav-burger.open span:last-child  { width: 20px; top: 18px; transform: rotate(-45deg); }
+
+    .mob-menu {
+      position: fixed;
+      inset: 0;
+      z-index: 400;
+      background: rgba(253,251,247,0.97);
+      backdrop-filter: blur(32px);
+      -webkit-backdrop-filter: blur(32px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.45s var(--ease-expo);
+    }
+
+    .mob-menu.open { opacity: 1; pointer-events: all; }
+
+    .mob-menu a {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(40px, 10vw, 64px);
+      font-weight: 400;
+      color: var(--ink);
+      text-decoration: none;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.5s var(--ease-expo), transform 0.5s var(--ease-expo), color 0.3s;
+    }
+
+    .mob-menu.open a { opacity: 1; transform: translateY(0); }
+    .mob-menu.open a:nth-child(1) { transition-delay: 0.06s; }
+    .mob-menu.open a:nth-child(2) { transition-delay: 0.11s; }
+    .mob-menu.open a:nth-child(3) { transition-delay: 0.16s; }
+    .mob-menu.open a:nth-child(4) { transition-delay: 0.21s; }
+    .mob-menu.open a:nth-child(5) { transition-delay: 0.26s; }
+    .mob-menu a:hover { color: var(--forest); }
+
+    /* ── PAGE HEADER ────────────────────────────────── */
+    .page-header {
+      padding: 160px 64px 80px;
+      max-width: 1320px;
+      margin: 0 auto;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(36,61,38,0.07);
+      border: 1px solid rgba(36,61,38,0.13);
+      border-radius: 100px;
+      padding: 5px 14px 5px 10px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.20em;
+      text-transform: uppercase;
+      color: var(--forest);
+      margin-bottom: 28px;
+    }
+
+    .eyebrow-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--amber);
+      flex-shrink: 0;
+    }
+
+    .page-header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(52px, 7vw, 96px);
+      font-weight: 400;
+      line-height: 0.97;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      margin-bottom: 20px;
+    }
+
+    .page-header h1 em { font-style: italic; color: var(--forest); }
+
+    .page-header p {
+      font-size: 16px;
+      color: var(--ink-2);
+      line-height: 1.70;
+      max-width: 500px;
+    }
+
+    /* ── RATE SECTIONS ──────────────────────────────── */
+    .rate-section {
+      padding: 96px 64px;
+      max-width: 1320px;
+      margin: 0 auto;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .rate-section:last-of-type { border-bottom: none; }
+
+    .rate-section-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 48px;
+      margin-bottom: 56px;
+    }
+
+    .rate-section-title {
+      flex: 1;
+    }
+
+    .rate-context {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ink-3);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      margin-bottom: 10px;
+    }
+
+    .rate-section-title h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(44px, 5.5vw, 80px);
+      font-weight: 400;
+      line-height: 0.97;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+    }
+
+    .rate-section-title h2 em { font-style: italic; color: var(--forest); }
+
+    .rate-base {
+      flex-shrink: 0;
+      text-align: right;
+    }
+
+    .rate-base-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--ink-3);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 4px;
+    }
+
+    .rate-base-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(52px, 6vw, 88px);
+      font-weight: 300;
+      color: var(--forest);
+      line-height: 1;
+    }
+
+    .rate-base-unit {
+      font-size: 13px;
+      color: var(--ink-3);
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    /* Rate card grid */
+    .rate-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+    }
+
+    /* outer double-bezel */
+    .rate-card {
+      background: rgba(36,61,38,0.04);
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      padding: 5px;
+    }
+
+    .rate-card-in {
+      background: var(--cream);
+      border-radius: 22px;
+      padding: 28px 30px;
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.85);
+      height: 100%;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .rate-card-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink-2);
+      line-height: 1.4;
+    }
+
+    .rate-card-label small {
+      display: block;
+      font-size: 11px;
+      color: var(--ink-3);
+      font-weight: 400;
+      margin-top: 3px;
+    }
+
+    .rate-card-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      font-weight: 300;
+      color: var(--forest);
+      white-space: nowrap;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .rate-card-price small {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--ink-3);
+      display: inline;
+    }
+
+    /* Highlighted base rate card */
+    .rate-card.featured {
+      background: rgba(36,61,38,0.08);
+      border-color: rgba(36,61,38,0.18);
+    }
+
+    .rate-card.featured .rate-card-in {
+      background: #F7F4EE;
+    }
+
+    .rate-card.featured .rate-card-label {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .rate-card.featured .rate-card-price {
+      font-size: 40px;
+    }
+
+    /* Cat care sub-section (House Sitting only) */
+    .rate-subsection {
+      margin-top: 40px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+    }
+
+    .rate-subsection-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ink-3);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      margin-bottom: 20px;
+    }
+
+    /* Note callout */
+    .rate-note {
+      margin-top: 28px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px 20px;
+      background: rgba(36,61,38,0.04);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    .rate-note-icon {
+      font-size: 15px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .rate-note p {
+      font-size: 13px;
+      color: var(--ink-2);
+      line-height: 1.65;
+    }
+
+    /* ── BOOKING CTA ────────────────────────────────── */
+    .booking-cta {
+      padding: 128px 64px;
+      text-align: center;
+      background: var(--forest);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .booking-cta::before {
+      content: '';
+      position: absolute;
+      bottom: -100px; left: -100px;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.02);
+      pointer-events: none;
+    }
+
+    .booking-cta .eyebrow {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.14);
+      color: rgba(255,255,255,0.65);
+      display: inline-flex;
+      margin-bottom: 24px;
+    }
+
+    .booking-cta h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(48px, 7vw, 96px);
+      font-weight: 400;
+      line-height: 0.97;
+      letter-spacing: -0.03em;
+      color: #fff;
+      margin-bottom: 24px;
+    }
+
+    .booking-cta h2 em {
+      font-style: italic;
+      color: rgba(255,255,255,0.50);
+    }
+
+    .booking-cta p {
+      font-size: 15px;
+      color: rgba(255,255,255,0.55);
+      max-width: 400px;
+      margin: 0 auto 44px;
+      line-height: 1.70;
+    }
+
+    .booking-btns {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #fff;
+      color: var(--forest);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 14px 12px 14px 22px;
+      border-radius: 100px;
+      text-decoration: none;
+      transition: background 0.4s var(--ease-spring), transform 0.4s var(--ease-spring);
+    }
+
+    .btn-primary:hover { background: var(--cream); transform: scale(0.97); }
+
+    .btn-primary .ic {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: rgba(36,61,38,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      transition: transform 0.4s var(--ease-spring);
+    }
+
+    .btn-primary:hover .ic { transform: translateX(2px) translateY(-2px) scale(1.1); }
+
+    .btn-ghost-w {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255,255,255,0.65);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      padding-bottom: 3px;
+      border-bottom: 1px solid rgba(255,255,255,0.25);
+      transition: color 0.3s, border-color 0.3s;
+    }
+
+    .btn-ghost-w:hover { color: #fff; border-color: rgba(255,255,255,0.6); }
+
+    /* ── FOOTER ─────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--cream);
+    }
+
+    .f-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--forest);
+      text-decoration: none;
+    }
+
+    .f-copy { font-size: 12px; color: var(--ink-3); }
+
+    .f-link {
+      font-size: 12px;
+      color: var(--ink-3);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .f-link:hover { color: var(--forest); }
+
+    /* ── SCROLL REVEAL ──────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      filter: blur(4px);
+      transition:
+        opacity  0.90s var(--ease-expo),
+        transform 0.90s var(--ease-expo),
+        filter   0.90s var(--ease-expo);
+    }
+
+    .reveal.visible { opacity: 1; transform: translateY(0); filter: blur(0); }
+    .reveal-delay-1 { transition-delay: 0.07s; }
+    .reveal-delay-2 { transition-delay: 0.14s; }
+    .reveal-delay-3 { transition-delay: 0.21s; }
+    .reveal-delay-4 { transition-delay: 0.28s; }
+
+    /* ── RESPONSIVE ─────────────────────────────────── */
+    @media (max-width: 960px) {
+      .nav-links, .nav-cta { display: none; }
+      .nav-burger { display: flex; }
+
+      .page-header { padding: 120px 24px 56px; }
+
+      .rate-section { padding: 64px 24px; }
+
+      .rate-section-head {
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .rate-base { text-align: left; }
+
+      .rate-grid { grid-template-columns: 1fr; }
+
+      .booking-cta { padding: 80px 24px; }
+
+      footer {
+        padding: 24px;
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ NAV ════════════════════════════════════════════ -->
+<nav class="nav" id="nav">
+  <a href="index.html" class="nav-logo">Island Paws</a>
+  <ul class="nav-links">
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="rates.html" class="active">Rates</a></li>
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#reviews">Reviews</a></li>
+    <li><a href="index.html#booking">Contact</a></li>
+  </ul>
+  <a href="index.html#booking" class="nav-cta">
+    Book a Stay
+    <span class="ic">↗</span>
+  </a>
+  <button class="nav-burger" id="burger" aria-label="Open menu">
+    <span></span><span></span>
+  </button>
+</nav>
+
+<!-- ══ MOBILE MENU ════════════════════════════════════ -->
+<div class="mob-menu" id="mobMenu">
+  <a href="index.html#services" onclick="closeMob()">Services</a>
+  <a href="rates.html"          onclick="closeMob()">Rates</a>
+  <a href="index.html#about"    onclick="closeMob()">About</a>
+  <a href="index.html#reviews"  onclick="closeMob()">Reviews</a>
+  <a href="index.html#booking"  onclick="closeMob()">Book a Stay</a>
+</div>
+
+<!-- ══ PAGE HEADER ════════════════════════════════════ -->
+<header class="page-header reveal">
+  <span class="eyebrow"><span class="eyebrow-dot"></span>Pricing</span>
+  <h1>Rates &amp;<br><em>what's included</em></h1>
+  <p>All rates are base prices for one dog. Holidays, extra pets, puppies, and extended stays have their own tiers — everything is listed below.</p>
+</header>
+
+<!-- ══════════════════════════════════════════════════════
+     BOARDING
+══════════════════════════════════════════════════════ -->
+<section class="rate-section" id="boarding">
+  <div class="rate-section-head reveal">
+    <div class="rate-section-title">
+      <div class="rate-context">In our home · Large fenced yard · Up to 8 pets</div>
+      <h2>Board<em>ing</em></h2>
+    </div>
+    <div class="rate-base">
+      <div class="rate-base-label">Base rate</div>
+      <div class="rate-base-num">$70</div>
+      <div class="rate-base-unit">per night</div>
+    </div>
+  </div>
+
+  <div class="rate-grid">
+
+    <div class="rate-card featured reveal">
+      <div class="rate-card-in">
+        <div class="rate-card-label">
+          Base Rate
+          <small>1 dog · standard nights</small>
+        </div>
+        <div class="rate-card-price">$70 <small>/night</small></div>
+      </div>
+    </div>
+
+    <div class="rate-card reveal reveal-delay-1">
+      <div class="rate-card-in">
+        <div class="rate-card-label">
+          Holiday Rate
+          <small>Major US holidays</small>
+        </div>
+        <div class="rate-card-price">$84 <small>/night</small></div>
+      </div>
+    </div>
+
+    <div class="rate-card reveal reveal-delay-2">
+      <div class="rate-card-in">
+        <div class="rate-card-label">
+          Additional Dog
+          <small>Each extra dog in same booking</small>
+        </div>
+        <div class="rate-card-price">+$56 <small>/dog/night</small></div>
+      </div>
+    </div>
+
+    <div class="rate-card reveal reveal-delay-3">
+      <div class="rate-card-in">
+        <div class="rate-card-label">
+          Puppy Rate
+          <small>Under 1 year old</small>
+        </div>
+        <div class="rate-card-price">$77 <small>/night</small></div>
+      </div>
+    </div>
+
+    <div class="rate-card reveal">
+      <div class="rate-card-in">
+        <div class="rate-card-label">
+          Extended Stay
+          <small>14 or more consecutive nights</small>
+        </div>
+        <div class="rate-card-price">$50 <small>/night</small></div>
+      </div>
+    </div>
+
+    <div class="rate-card reveal reveal-delay-1">
+      <div class="rate-card-in">
+        <div class="rate-card-label">
+          Pick-up &amp; Drop-off
+          <small>Round trip, Bainbridge Island</small>
+        </div>
+        <div class="rate-card-price">+$50 <small>/trip</small></div>
+      </div>
+    </div>
+
+    <div class="rate-card reveal reveal-delay-2">
+      <div class="rate-card-in">
+        <div class="rate-card-label">
+          Extended Care
+          <small>Additional daytime hours beyond standard</small>
+        </div>
+        <div class="rate-card-price">50–100% <small>of nightly rate</small></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="rate-note reveal">
+    <div class="rate-note-icon">🏡</div>
+    <p>Boarding takes place entirely in our home and yard. Your dog is never in a kennel or crate — they sleep on furniture, play in the fenced yard, and spend evenings with the whole family including our three kids.</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     HOUSE SITTING
+══════════════════════════════════════════════════════ -->
+<section class="rate-section" id="house-sitting" style="background: var(--cream-alt);">
+  <div class="rate-section-head reveal">
+    <div class="rate-section-title">
+      <div class="rate-context">In your home · Your dog never leaves their routine</div>
+      <h2>House <em>Sitting</em></h2>
+    </div>
+    <div class="rate-base">
+      <div class="rate-base-label">Base rate</div>
+      <div class="rate-base-num">$140</div>
+      <div class="rate-base-unit">per night</div>
+    </div>
+  </div>
+
+  <div class="rate-grid">
+
+    <div class="rate-card featured reveal">
+      <div class="rate-card-in">
+        <div class="rate-card-label">
+          Base Rate
+          <small>1 dog · standard nights</small>
+        </div>
+        <div class="rate-card-price">$140 <small>/night</small></div>
+      </div>
+    </div>
+
+    <div class="rate-card reveal reveal-delay-1">
+      <div class="rate-card-in">
+        <div class="rate-card-label">
+          Holiday Rate
+          <small>Major US holidays</small>
+        </div>
+        <div class="rate-card-price">$160 <small>/night</small></div>
+      </div>
+    </div>
+
+    <div class="rate-card reveal reveal-delay-2">
+      <div class="rate-card-in">
+        <div class="rate-card-label">
+          Additional Dog
+          <small>Each extra dog in same booking</small>
+        </div>
+        <div class="rate-card-price">+$40 <small>/dog/night</small></div>
+      </div>
+    </div>
+
+    <div class="rate-card reveal reveal-delay-3">
+      <div class="rate-card-in">
+        <div class="rate-card-label">
+          Puppy Rate
+          <small>Under 1 year old</small>
+        </div>
+        <div class="rate-card-price">$154 <small>/night</small></div>
+      </div>
+    </div>
+
+    <div class="rate-card reveal">
+      <div class="rate-card-in">
+        <div class="rate-card-label">
+          Extended Stay
+          <small>7 or more consecutive nights</small>
+        </div>
+        <div class="rate-card-price">$120 <small>/night</small></div>
+      </div>
+    </div>
+
+    <div class="rate-card reveal reveal-delay-1">
+      <div class="rate-card-in">
+        <div class="rate-card-label">
+          Extended Care
+          <small>Additional daytime hours beyond standard</small>
+        </div>
+        <div class="rate-card-price">50–100% <small>of nightly rate</small></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Cat care subsection -->
+  <div class="rate-subsection reveal">
+    <div class="rate-subsection-label">Cat care — house sitting only</div>
+    <div class="rate-grid">
+
+      <div class="rate-card reveal">
+        <div class="rate-card-in">
+          <div class="rate-card-label">
+            Cat Base Rate
+            <small>1 cat · standard nights</small>
+          </div>
+          <div class="rate-card-price">$98 <small>/night</small></div>
+        </div>
+      </div>
+
+      <div class="rate-card reveal reveal-delay-1">
+        <div class="rate-card-in">
+          <div class="rate-card-label">
+            Additional Cat
+            <small>Each extra cat in same booking</small>
+          </div>
+          <div class="rate-card-price">+$30 <small>/cat/night</small></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="rate-note reveal">
+    <div class="rate-note-icon">🔑</div>
+    <p>We stay overnight in your home so your pet never misses a meal, a walk, or a familiar face. One of us — or our whole family — comes to you. Your dog keeps their schedule, their bed, and their environment exactly as normal.</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     DOGGY DAY CARE
+══════════════════════════════════════════════════════ -->
+<section class="rate-section" id="day-care">
+  <div class="rate-section-head reveal">
+    <div class="rate-section-title">
+      <div class="rate-context">In our home · Drop off in the morning, pick up at night</div>
+      <h2>Doggy <em>Day Care</em></h2>
+    </div>
+    <div class="rate-base">
+      <div class="rate-base-label">Base rate</div>
+      <div class="rate-base-num">$50</div>
+      <div class="rate-base-unit">per day</div>
+    </div>
+  </div>
+
+  <div class="rate-grid">
+
+    <div class="rate-card featured reveal">
+      <div class="rate-card-in">
+        <div class="rate-card-label">
+          Base Rate
+          <small>1 dog · standard days</small>
+        </div>
+        <div class="rate-card-price">$50 <small>/day</small></div>
+      </div>
+    </div>
+
+    <div class="rate-card reveal reveal-delay-1">
+      <div class="rate-card-in">
+        <div class="rate-card-label">
+          Holiday Rate
+          <small>Major US holidays</small>
+        </div>
+        <div class="rate-card-price">$60 <small>/day</small></div>
+      </div>
+    </div>
+
+    <div class="rate-card reveal reveal-delay-2">
+      <div class="rate-card-in">
+        <div class="rate-card-label">
+          Additional Dog
+          <small>Each extra dog in same booking</small>
+        </div>
+        <div class="rate-card-price">+$40 <small>/dog/day</small></div>
+      </div>
+    </div>
+
+    <div class="rate-card reveal reveal-delay-3">
+      <div class="rate-card-in">
+        <div class="rate-card-label">
+          Puppy Rate
+          <small>Under 1 year old</small>
+        </div>
+        <div class="rate-card-price">$55 <small>/day</small></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="rate-note reveal">
+    <div class="rate-note-icon">☀️</div>
+    <p>Day care runs full days in our yard and home. You'll get photo updates throughout the day. Drop-off and pick-up times are flexible — just let us know what works for your schedule.</p>
+  </div>
+</section>
+
+<!-- ══ BOOKING CTA ═════════════════════════════════════ -->
+<section class="booking-cta">
+  <div class="reveal">
+    <span class="eyebrow"><span class="eyebrow-dot"></span>Ready to Book</span>
+    <h2>Questions about<br><em>your dog's stay?</em></h2>
+    <p>All bookings go through Rover, where you can check availability, message us directly, and read all 95 reviews.</p>
+    <div class="booking-btns">
+      <a href="https://www.rover.com/members/trenton-jordan-r-family-doggie-home/" target="_blank" class="btn-primary">
+        Book on Rover
+        <span class="ic">↗</span>
+      </a>
+      <a href="mailto:hello@islandpaws.com" class="btn-ghost-w">hello@islandpaws.com</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══════════════════════════════════════════ -->
+<footer>
+  <a href="index.html" class="f-logo">Island Paws</a>
+  <span class="f-copy">© 2026 Island Paws · Bainbridge Island, WA</span>
+  <a href="https://www.rover.com/members/trenton-jordan-r-family-doggie-home/" target="_blank" class="f-link">Rover Profile →</a>
+</footer>
+
+<!-- ══ SCRIPTS ══════════════════════════════════════════ -->
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  const burger  = document.getElementById('burger');
+  const mobMenu = document.getElementById('mobMenu');
+  let open = false;
+
+  burger.addEventListener('click', () => {
+    open = !open;
+    burger.classList.toggle('open', open);
+    mobMenu.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+
+  function closeMob() {
+    open = false;
+    burger.classList.remove('open');
+    mobMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' });
+
+  reveals.forEach(el => io.observe(el));
+</script>
+</body>
+</html>

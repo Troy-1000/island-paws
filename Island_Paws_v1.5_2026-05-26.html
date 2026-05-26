@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Island Paws — Bainbridge Island Dog Care</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --grad-top:    #F2F4E8;
+      --grad-mid:    #E6EADA;
+      --grad-bottom: #D4D8C4;
+      --ink:         #1E231B;
+      --ink-2:       #52594D;
+      --ink-3:       #777C6C;
+      --sage:        #5D7256;
+      --sage-dark:   #3D5038;
+      --sage-light:  #8EA88A;
+      --border:      rgba(30,39,27,0.09);
+      --ease:        cubic-bezier(0.32, 0.72, 0, 1);
+      --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: transparent;
+      color: var(--ink);
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(to bottom, var(--grad-top), var(--grad-mid) 50%, var(--grad-bottom));
+    }
+
+    /* ── NAV ───────────────────────────────────────────── */
+    .nav {
+      position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+      z-index: 100; display: flex; align-items: center; gap: 24px;
+      padding: 10px 10px 10px 24px;
+      background: rgba(242,244,232,0.72);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.82); border-radius: 100px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+      white-space: nowrap;
+    }
+    .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 400; color: var(--ink); text-decoration: none; }
+    .nav-links { display: flex; gap: 20px; list-style: none; }
+    .nav-links a { font-size: 13px; font-weight: 500; color: var(--ink-2); text-decoration: none; transition: color 180ms var(--ease); }
+    @media (hover: hover) and (pointer: fine) { .nav-links a:hover { color: var(--ink); } }
+    .nav-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 9px 9px 9px 18px; background: var(--sage); color: #fff;
+      font-size: 13px; font-weight: 500; border-radius: 100px; text-decoration: none;
+      transition: background 200ms var(--ease), transform 160ms var(--ease);
+    }
+    .nav-cta:active { transform: scale(0.97); }
+    @media (hover: hover) and (pointer: fine) { .nav-cta:hover { background: var(--sage-dark); } }
+    .nav-cta-arrow { width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,0.22); display: flex; align-items: center; justify-content: center; }
+
+    /* ── SHARED ─────────────────────────────────────────── */
+    .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.13em; text-transform: uppercase; color: var(--sage); margin-bottom: 14px; }
+
+    .section-wrap { background: rgba(255,255,255,0.46); border: 1px solid rgba(255,255,255,0.65); border-radius: 24px; padding: 64px; margin: 0 40px 28px; }
+
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 520ms var(--ease), transform 520ms var(--ease); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 70ms; }
+    .reveal-delay-2 { transition-delay: 140ms; }
+    .reveal-delay-3 { transition-delay: 210ms; }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .gd { transition: none; }
+      .gd-backdrop { transition: none; }
+      .reviews-expand { transition: none; }
+      .gd-close { transition: none; }
+      .mobile-nav { transition: none; }
+    }
+
+    .section-h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(36px, 3.8vw, 60px); font-weight: 400; line-height: 1.05; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 10px; }
+    .section-h2 em { font-style: italic; }
+    .section-sub { font-size: 15px; color: var(--ink-2); line-height: 1.65; }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 12px 14px 22px; background: var(--sage); color: #fff;
+      font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 500;
+      border-radius: 100px; text-decoration: none;
+      transition: background 200ms var(--ease), transform 160ms var(--ease);
+    }
+    .btn-primary:active { transform: scale(0.97); }
+    @media (hover: hover) and (pointer: fine) { .btn-primary:hover { background: var(--sage-dark); } }
+    .btn-arrow { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.20); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 10px 10px 18px;
+      background: rgba(255,255,255,0.50); border: 1px solid rgba(255,255,255,0.80);
+      color: var(--ink-2); font-size: 13px; font-weight: 500;
+      border-radius: 100px; cursor: pointer; text-decoration: none;
+      transition: background 200ms var(--ease), transform 160ms var(--ease);
+    }
+    .btn-secondary:active { transform: scale(0.97); }
+    @media (hover: hover) and (pointer: fine) { .btn-secondary:hover { background: rgba(255,255,255,0.80); color: var(--ink); } }
+    .btn-secondary .ic { width: 24px; height: 24px; border-radius: 50%; background: rgba(30,39,27,0.07); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 250ms var(--ease); }
+    @media (hover: hover) and (pointer: fine) { .btn-secondary:hover .ic { transform: translateX(2px); } }
+
+    /* ── HERO ───────────────────────────────────────────── */
+    .hero { min-height: 100vh; display: flex; align-items: center; padding: 120px 80px 80px; overflow: hidden; }
+    .hero-inner { display: grid; grid-template-columns: 45% 1fr; gap: 48px; align-items: center; width: 100%; }
+    .hero-h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(54px, 5.8vw, 92px); font-weight: 300; line-height: 0.97; letter-spacing: -0.025em; color: var(--ink); margin-bottom: 22px; }
+    .hero-h1 em { font-style: italic; }
+    .hero-sub { font-size: 16px; color: var(--ink-2); line-height: 1.65; margin-bottom: 36px; max-width: 380px; }
+    .trust-strip { display: flex; align-items: center; gap: 6px; margin-top: 32px; padding-top: 24px; border-top: 1px solid rgba(30,39,27,0.08); font-size: 13px; color: var(--ink-3); font-weight: 500; }
+    .trust-sep { color: rgba(30,39,27,0.18); }
+
+    /* Hero collage */
+    .hero-collage { position: relative; height: 560px; }
+    .collage-img { position: absolute; border-radius: 14px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.13), 0 2px 8px rgba(0,0,0,0.07); border: 4px solid #fff; background: var(--grad-mid); cursor: pointer; }
+    .collage-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 300ms var(--ease-out); }
+    .collage-img:active img { transform: scale(0.97); }
+    @media (hover: hover) and (pointer: fine) { .collage-img:hover img { transform: scale(1.04); } }
+    .collage-img:nth-child(1) { width: 270px; height: 330px; top: 0;   left: 30px;  transform: rotate(-2.5deg); z-index: 3; }
+    .collage-img:nth-child(2) { width: 230px; height: 270px; top: 30px; right: 10px; transform: rotate(2deg);   z-index: 2; }
+    .collage-img:nth-child(3) { width: 200px; height: 220px; bottom: 50px; left: 0;  transform: rotate(1.8deg); z-index: 2; }
+    .collage-img:nth-child(4) { width: 255px; height: 290px; bottom: 10px; right: 20px; transform: rotate(-1.5deg); z-index: 3; }
+    .collage-img:nth-child(5) { width: 175px; height: 195px; top: 46%;  left: 44%;  transform: translate(-50%,-50%) rotate(1deg); z-index: 4; }
+    .collage-footer { position: absolute; bottom: -44px; left: 0; right: 0; display: flex; justify-content: center; }
+
+    /* ── SERVICES ───────────────────────────────────────── */
+    .services-head { margin-bottom: 44px; }
+    .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .svc-card { background: rgba(255,255,255,0.42); border: 1px solid rgba(255,255,255,0.72); border-radius: 20px; padding: 32px; transition: transform 220ms var(--ease), box-shadow 220ms var(--ease); }
+    @media (hover: hover) and (pointer: fine) { .svc-card:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.08); } }
+    .svc-icon { width: 44px; height: 44px; border-radius: 10px; background: var(--sage); display: flex; align-items: center; justify-content: center; margin-bottom: 24px; flex-shrink: 0; }
+    .svc-name { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 400; color: var(--ink); margin-bottom: 10px; line-height: 1.1; letter-spacing: -0.01em; }
+    .svc-desc { font-size: 14px; color: var(--ink-2); line-height: 1.70; margin-bottom: 28px; }
+    .svc-price { display: flex; align-items: baseline; gap: 4px; padding-top: 20px; border-top: 1px solid rgba(30,39,27,0.07); }
+    .svc-price-num { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 300; color: var(--sage); line-height: 1; }
+    .svc-price-unit { font-size: 12px; color: var(--ink-3); font-weight: 500; }
+    .services-footer-link { margin-top: 36px; text-align: center; }
+    .services-footer-link a { font-size: 13px; font-weight: 500; color: var(--ink-3); text-decoration: none; border-bottom: 1px solid rgba(93,114,86,0.25); padding-bottom: 2px; transition: color 200ms var(--ease), border-color 200ms var(--ease); }
+    @media (hover: hover) and (pointer: fine) { .services-footer-link a:hover { color: var(--sage); border-color: var(--sage); } }
+
+    /* ── ABOUT ──────────────────────────────────────────── */
+    .about-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    .about-copy h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(34px, 3.4vw, 54px); font-weight: 400; line-height: 1.05; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 18px; }
+    .about-copy p { font-size: 15px; color: var(--ink-2); line-height: 1.75; }
+    .about-photo { border-radius: 18px; overflow: hidden; aspect-ratio: 4/3; background: var(--sage-light); }
+    .about-photo img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 400ms var(--ease-out); }
+    @media (hover: hover) and (pointer: fine) { .about-photo:hover img { transform: scale(1.03); } }
+
+    /* ── TYPICAL DAY ────────────────────────────────────── */
+    .day-head { margin-bottom: 44px; }
+    .day-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .day-card { background: rgba(255,255,255,0.42); border: 1px solid rgba(255,255,255,0.72); border-radius: 20px; padding: 28px; }
+    .day-time { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 300; color: var(--sage); margin-bottom: 8px; line-height: 1; }
+    .day-title { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 8px; letter-spacing: 0.01em; }
+    .day-desc { font-size: 13px; color: var(--ink-2); line-height: 1.65; }
+
+    /* ── REVIEWS ────────────────────────────────────────── */
+    .reviews-head { margin-bottom: 44px; }
+    .reviews-source { font-size: 12px; color: var(--ink-3); font-weight: 500; margin-top: 6px; }
+    .reviews-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; grid-template-rows: auto auto; gap: 14px; margin-bottom: 32px; }
+    .rv { background: rgba(255,255,255,0.42); border: 1px solid rgba(255,255,255,0.72); border-radius: 20px; padding: 28px; display: flex; flex-direction: column; }
+    .rv.span-2 { grid-column: 1; grid-row: 1 / span 2; }
+    .rv-stars { color: var(--sage); font-size: 11px; letter-spacing: 3px; margin-bottom: 18px; }
+    .rv-quote { font-family: 'Cormorant Garamond', serif; font-size: clamp(17px, 1.8vw, 22px); font-weight: 400; line-height: 1.52; color: var(--ink); margin-bottom: 24px; flex: 1; }
+    .rv:not(.span-2) .rv-quote { font-size: clamp(14px, 1.3vw, 17px); }
+    .rv-author { display: flex; align-items: center; gap: 10px; margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(30,39,27,0.07); }
+    .rv-av { width: 34px; height: 34px; border-radius: 50%; background: var(--sage); display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 15px; color: #fff; flex-shrink: 0; }
+    .rv-name { font-size: 13px; font-weight: 600; color: var(--ink); }
+    .rv-tag { font-size: 11px; color: var(--ink-3); margin-top: 1px; }
+
+    /* Reviews expand */
+    .reviews-expand { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.75s var(--ease-out); margin-top: 8px; }
+    .reviews-expand.open { grid-template-rows: 1fr; }
+    .reviews-expand-inner { overflow: hidden; }
+    .reviews-filters-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; padding-top: 32px; }
+    .reviews-open-btn {
+      text-align: center; margin-top: 32px;
+      position: sticky; bottom: 24px; z-index: 20;
+      pointer-events: none;
+    }
+    .reviews-open-btn .btn-all-reviews { pointer-events: all; box-shadow: 0 4px 24px rgba(0,0,0,0.10); }
+    .filter-btn { display: inline-flex; align-items: center; gap: 5px; padding: 5px 13px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.80); background: rgba(255,255,255,0.42); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; font-weight: 500; color: var(--ink-3); cursor: pointer; transition: background 220ms var(--ease), border-color 220ms var(--ease), color 220ms var(--ease), transform 160ms var(--ease); }
+    .filter-btn:active { transform: scale(0.97); }
+    @media (hover: hover) and (pointer: fine) { .filter-btn:hover { border-color: rgba(93,114,86,0.35); color: var(--ink-2); } }
+    .filter-btn.active { background: var(--sage); border-color: var(--sage); color: #fff; }
+    .reviews-all-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding-bottom: 8px; }
+    .mr { background: rgba(255,255,255,0.42); border: 1px solid rgba(255,255,255,0.72); border-radius: 16px; padding: 18px 20px; }
+    .mr.mr-negative { border-color: rgba(160,80,80,0.20); background: rgba(255,250,250,0.50); }
+    .mr-meta { display: flex; align-items: center; gap: 7px; margin-bottom: 7px; flex-wrap: wrap; }
+    .mr-name { font-size: 13px; font-weight: 600; color: var(--ink); }
+    .mr-svc { display: inline-block; padding: 2px 8px; border-radius: 100px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; white-space: nowrap; }
+    .mr-svc.b  { background: rgba(93,114,86,0.12);  color: var(--sage-dark); }
+    .mr-svc.hs { background: rgba(93,114,86,0.08);  color: var(--sage); }
+    .mr-svc.dc { background: rgba(142,168,138,0.18); color: var(--sage-dark); }
+    .mr-date { font-size: 11px; color: var(--ink-3); margin-left: auto; white-space: nowrap; }
+    .mr-stars { color: var(--sage); font-size: 10px; letter-spacing: 2px; margin-bottom: 6px; }
+    .mr-quote { font-size: 13px; color: var(--ink-2); line-height: 1.60; }
+    .mr-response { margin-top: 10px; padding: 10px 12px; background: rgba(93,114,86,0.07); border-radius: 9px; border: 1px solid rgba(93,114,86,0.14); }
+    .mr-response-label { font-size: 10px; font-weight: 600; color: var(--sage); text-transform: uppercase; letter-spacing: 0.10em; margin-bottom: 4px; }
+    .mr-response p { font-size: 12px; color: var(--ink-2); line-height: 1.58; }
+    .mr.hidden { display: none; }
+    .btn-all-reviews { display: inline-flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.50); border: 1px solid rgba(255,255,255,0.80); color: var(--ink-2); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 500; padding: 12px 12px 12px 20px; border-radius: 100px; cursor: pointer; transition: background 200ms var(--ease), transform 160ms var(--ease); }
+    .btn-all-reviews:active { transform: scale(0.97); }
+    @media (hover: hover) and (pointer: fine) { .btn-all-reviews:hover { background: rgba(255,255,255,0.80); color: var(--ink); } }
+    .btn-all-reviews .ic { width: 28px; height: 28px; border-radius: 50%; background: rgba(30,39,27,0.07); display: flex; align-items: center; justify-content: center; transition: transform 280ms var(--ease); }
+    .btn-all-reviews[aria-expanded="true"] .ic { transform: rotate(90deg); }
+    @media (hover: hover) and (pointer: fine) { .btn-all-reviews:not([aria-expanded="true"]):hover .ic { transform: translateX(2px); } }
+    @media (hover: hover) and (pointer: fine) { .btn-all-reviews[aria-expanded="true"]:hover .ic { transform: rotate(90deg) translateX(2px); } }
+
+    /* ── RATES ──────────────────────────────────────────── */
+    .rate-block { padding: 56px 0; border-top: 1px solid rgba(255,255,255,0.65); }
+    .rate-block:first-of-type { padding-top: 0; border-top: none; }
+    .rate-block-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 40px; margin-bottom: 36px; flex-wrap: wrap; }
+    .rate-block-meta { font-size: 11px; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 8px; }
+    .rate-block-name { font-family: 'Cormorant Garamond', serif; font-size: clamp(36px, 4vw, 60px); font-weight: 400; line-height: 0.97; letter-spacing: -0.025em; color: var(--ink); }
+    .rate-block-name em { font-style: normal; }
+    .rate-base { flex-shrink: 0; text-align: right; }
+    .rate-base-label { font-size: 10px; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 4px; }
+    .rate-base-num { font-family: 'Cormorant Garamond', serif; font-size: clamp(44px, 5vw, 68px); font-weight: 300; color: var(--sage); line-height: 1; }
+    .rate-base-unit { font-size: 12px; color: var(--ink-3); font-weight: 500; margin-top: 3px; }
+    .rate-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; }
+    .rate-card { background: rgba(255,255,255,0.42); border: 1px solid rgba(255,255,255,0.72); border-radius: 18px; padding: 18px 22px; display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+    .rate-card.featured { background: rgba(255,255,255,0.68); border-color: rgba(255,255,255,0.90); }
+    .rate-card-label { font-size: 13px; font-weight: 500; color: var(--ink-2); line-height: 1.4; }
+    .rate-card.featured .rate-card-label { color: var(--ink); font-weight: 600; }
+    .rate-card-label small { display: block; font-size: 11px; color: var(--ink-3); font-weight: 400; margin-top: 3px; }
+    .rate-card-price { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 300; color: var(--sage); white-space: nowrap; line-height: 1; flex-shrink: 0; text-align: right; }
+    .rate-card.featured .rate-card-price { font-size: 30px; }
+    .rate-card-price small { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 10px; font-weight: 500; color: var(--ink-3); display: block; margin-top: 2px; }
+    .rate-subsection { margin-top: 28px; padding-top: 28px; border-top: 1px solid rgba(255,255,255,0.65); }
+    .rate-subsection-label { font-size: 11px; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 14px; }
+    .rate-note { margin-top: 20px; padding: 14px 18px; background: rgba(255,255,255,0.42); border: 1px solid rgba(255,255,255,0.65); border-radius: 14px; font-size: 13px; color: var(--ink-2); line-height: 1.65; }
+
+    /* ── BOOKING CTA ────────────────────────────────────── */
+    .booking { text-align: center; padding: 120px 80px 100px; max-width: 760px; margin: 0 auto; }
+    .booking h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(54px, 7.5vw, 108px); font-weight: 300; line-height: 0.96; letter-spacing: -0.03em; color: var(--ink); margin-bottom: 20px; }
+    .booking p { font-size: 15px; color: var(--ink-2); line-height: 1.65; margin-bottom: 40px; }
+    .booking .btn-primary { margin: 0 auto; }
+
+    /* ── FOOTER ─────────────────────────────────────────── */
+    footer { border-top: 1px solid rgba(30,39,27,0.08); padding: 24px 80px; display: flex; align-items: center; justify-content: space-between; }
+    .f-logo { font-family: 'Cormorant Garamond', serif; font-size: 15px; font-weight: 400; color: var(--ink-2); text-decoration: none; }
+    .f-copy { font-size: 12px; color: var(--ink-3); }
+    .f-link { font-size: 12px; color: var(--ink-3); text-decoration: none; transition: color 200ms var(--ease); }
+    @media (hover: hover) and (pointer: fine) { .f-link:hover { color: var(--sage); } }
+
+    /* ── PAGE WRAP ─────────────────────────────────────── */
+    .page-wrap { max-width: 1280px; margin: 0 auto; }
+
+    /* ── MOBILE NAV ─────────────────────────────────────── */
+    .nav-hamburger {
+      display: none; width: 34px; height: 34px; border-radius: 50%;
+      background: rgba(255,255,255,0.22); border: none; cursor: pointer;
+      align-items: center; justify-content: center; color: var(--ink);
+      flex-shrink: 0; transition: background 180ms var(--ease);
+    }
+    @media (hover: hover) and (pointer: fine) { .nav-hamburger:hover { background: rgba(255,255,255,0.40); } }
+    .mobile-nav {
+      position: fixed; top: 70px; left: 50%;
+      transform: translateX(-50%) translateY(-8px);
+      z-index: 98; background: rgba(242,244,232,0.94);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.82); border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.10), 0 1px 3px rgba(0,0,0,0.05);
+      padding: 6px; min-width: 190px;
+      opacity: 0; pointer-events: none; visibility: hidden;
+      transition: opacity 220ms var(--ease), transform 220ms var(--ease);
+    }
+    .mobile-nav.open {
+      opacity: 1; pointer-events: all; visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+    .mobile-nav-list { list-style: none; display: flex; flex-direction: column; }
+    .mobile-nav-list a {
+      display: block; padding: 12px 18px;
+      font-size: 14px; font-weight: 500; color: var(--ink-2);
+      text-decoration: none; border-radius: 10px;
+      transition: background 160ms var(--ease), color 160ms var(--ease);
+    }
+    @media (hover: hover) and (pointer: fine) { .mobile-nav-list a:hover { background: rgba(93,114,86,0.08); color: var(--ink); } }
+
+    /* ── RATING STARS ────────────────────────────────────── */
+    .rating-stars-row { display: flex; gap: 5px; align-items: center; margin-bottom: 16px; }
+    .rstar { display: block; flex-shrink: 0; }
+
+    /* Trust strip inline rating */
+    .trust-rating { display: inline-flex; align-items: center; gap: 4px; }
+    .trust-stars-mini { display: inline-flex; align-items: center; gap: 2px; line-height: 1; }
+
+    /* Reviews head sub-row: stars left, Star Sitter right */
+    .reviews-head-sub { display: flex; align-items: center; justify-content: flex-start; gap: 16px; margin-top: 14px; }
+    .reviews-head-sub .rating-stars-row { margin-bottom: 0; }
+
+    /* ── GALLERY DRAWER ─────────────────────────────────── */
+    .gd-backdrop { position: fixed; inset: 0; z-index: 498; background: rgba(20,20,20,0.55); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); opacity: 0; pointer-events: none; transition: opacity 0.4s var(--ease-out); }
+    .gd-backdrop.open { opacity: 1; pointer-events: all; }
+    .gd { position: fixed; top: 0; right: 0; height: 100%; width: 520px; max-width: 95vw; background: #F2F4E8; z-index: 499; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.5s var(--ease); box-shadow: -24px 0 64px rgba(0,0,0,0.14), -1px 0 0 rgba(255,255,255,0.60); border-radius: 24px 0 0 24px; }
+    .gd.open { transform: translateX(0); }
+    .gd-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid rgba(30,39,27,0.08); flex-shrink: 0; }
+    .gd-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400; color: var(--ink); letter-spacing: -0.01em; }
+    .gd-count { font-size: 12px; color: var(--ink-3); font-weight: 500; margin-left: 6px; }
+    .gd-close { width: 30px; height: 30px; border-radius: 50%; background: rgba(30,39,27,0.07); border: 1px solid rgba(30,39,27,0.10); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--ink-2); transition: background 200ms, transform 350ms var(--ease-out); }
+    @media (hover: hover) and (pointer: fine) { .gd-close:hover { background: rgba(30,39,27,0.13); transform: rotate(90deg); } }
+    .gd-grid-wrap { flex: 1; overflow-y: auto; padding: 12px; -webkit-overflow-scrolling: touch; }
+    .gd-grid-wrap::-webkit-scrollbar { width: 4px; }
+    .gd-grid-wrap::-webkit-scrollbar-thumb { background: rgba(30,39,27,0.12); border-radius: 2px; }
+    .gd-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+    .gd-thumb { aspect-ratio: 1; border-radius: 10px; overflow: hidden; cursor: pointer; background: rgba(30,39,27,0.05); }
+    .gd-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 280ms var(--ease-out); }
+    @media (hover: hover) and (pointer: fine) { .gd-thumb:hover img { transform: scale(1.06); } }
+    .gd-full-wrap { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .gd-back { align-self: flex-start; margin: 14px 18px 10px; padding: 7px 14px; border-radius: 20px; border: 1px solid rgba(30,39,27,0.10); background: transparent; color: var(--ink-2); font-size: 13px; font-weight: 500; font-family: 'Plus Jakarta Sans', sans-serif; cursor: pointer; transition: background 200ms; }
+    @media (hover: hover) and (pointer: fine) { .gd-back:hover { background: rgba(30,39,27,0.06); } }
+    .gd-full-scroll { flex: 1; overflow-y: auto; display: flex; align-items: flex-start; justify-content: center; padding: 0 12px 20px; }
+    .gd-full-img { width: 100%; border-radius: 16px; display: block; }
+    @media (max-width: 600px) {
+      .gd { border-radius: 20px 20px 0 0; top: auto; bottom: 0; height: 92dvh; width: 100%; transform: translateY(100%); }
+      .gd.open { transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ─────────────────────────────────────── */
+    @media (max-width: 960px) {
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+      .section-wrap { padding: 48px 36px; margin: 0 24px 20px; }
+      .hero { padding: 100px 40px 60px; }
+      .hero-inner { grid-template-columns: 1fr; }
+      .hero-collage { height: 360px; }
+      .collage-img:nth-child(3),
+      .collage-img:nth-child(5) { display: none; }
+      .collage-img:nth-child(1) { width: 220px; height: 270px; top: 0; left: calc(50% - 230px); right: auto; }
+      .collage-img:nth-child(2) { width: 190px; height: 225px; top: 20px; left: calc(50% + 30px); right: auto; }
+      .collage-img:nth-child(4) { width: 205px; height: 240px; bottom: 10px; left: calc(50% - 105px); right: auto; z-index: 5; }
+      .cards-grid { grid-template-columns: 1fr; }
+      .about-inner { grid-template-columns: 1fr; gap: 36px; }
+      .day-grid { grid-template-columns: 1fr 1fr; }
+      .reviews-grid { grid-template-columns: 1fr; }
+      .rv.span-2 { grid-column: 1; grid-row: auto; }
+      .reviews-all-grid { grid-template-columns: 1fr; }
+      .rate-block-head { flex-direction: column; gap: 16px; }
+      .rate-base { text-align: left; }
+      .booking { padding: 80px 40px 60px; }
+      footer { flex-direction: column; gap: 12px; padding: 24px 40px; text-align: center; }
+    }
+
+    @media (max-width: 600px) {
+      .nav { padding: 8px 8px 8px 16px; gap: 10px; }
+      .nav-cta { font-size: 12px; padding: 7px 7px 7px 14px; }
+      .section-wrap { padding: 36px 20px; margin: 0 14px 16px; }
+      .hero { padding: 80px 20px 40px; }
+      .hero-collage { height: 260px; }
+      .collage-img:nth-child(1) { width: 160px; height: 195px; top: 0; left: calc(50% - 170px); right: auto; }
+      .collage-img:nth-child(2) { width: 148px; height: 178px; top: 16px; left: calc(50% + 18px); right: auto; }
+      .collage-img:nth-child(4) { width: 155px; height: 185px; bottom: 8px; left: calc(50% - 80px); right: auto; }
+      .hero-h1 { font-size: clamp(46px, 12vw, 70px); }
+      .day-grid { grid-template-columns: 1fr; }
+      .booking { padding: 60px 20px 40px; }
+      footer { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="#" class="nav-logo">Island Paws</a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#rates">Rates</a></li>
+    <li><a href="#booking">Book</a></li>
+  </ul>
+  <button class="nav-hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">
+    <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true">
+      <rect y="0.25" width="16" height="1.5" rx="0.75" fill="currentColor"/>
+      <rect y="5.25" width="16" height="1.5" rx="0.75" fill="currentColor"/>
+      <rect y="10.25" width="16" height="1.5" rx="0.75" fill="currentColor"/>
+    </svg>
+  </button>
+  <a href="https://www.rover.com/members/trenton-jordan-r-family-doggie-home/" target="_blank" rel="noopener noreferrer" class="nav-cta">
+    Book on Rover
+    <span class="nav-cta-arrow">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2.5 10.5L10.5 2.5M10.5 2.5H4.5M10.5 2.5V8.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </span>
+  </a>
+</nav>
+
+<!-- Mobile nav dropdown -->
+<div class="mobile-nav" id="mobileNav" aria-hidden="true">
+  <ul class="mobile-nav-list">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#rates">Rates</a></li>
+    <li><a href="#booking">Book</a></li>
+  </ul>
+</div>
+
+<div class="page-wrap">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <div class="eyebrow">Bainbridge Island, WA</div>
+      <h1 class="hero-h1">Your dog,<br><em>at home.</em></h1>
+      <p class="hero-sub">Real family care from a family that's always had dogs, on an island where life slows down enough to do it right.</p>
+      <a href="https://www.rover.com/members/trenton-jordan-r-family-doggie-home/" target="_blank" rel="noopener noreferrer" class="btn-primary">
+        Book on Rover
+        <span class="btn-arrow">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H4.5M11.5 2.5V9.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+      <div class="trust-strip">
+        <span class="trust-rating" aria-label="4.9 out of 5 stars, 75 reviews on Rover">
+          4.9
+          <span class="trust-stars-mini" aria-hidden="true">
+            <svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="var(--sage)"/></svg>
+            <svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="var(--sage)"/></svg>
+            <svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="var(--sage)"/></svg>
+            <svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="var(--sage)"/></svg>
+            <svg width="13" height="13" viewBox="0 0 24 24">
+              <defs><clipPath id="ts-star-clip"><rect x="0" y="0" width="21.6" height="24"/></clipPath></defs>
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#C4C4C4"/>
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="var(--sage)" clip-path="url(#ts-star-clip)"/>
+            </svg>
+          </span>
+          (75)
+        </span>
+        <span class="trust-sep">·</span>
+        <span>3 services</span>
+        <span class="trust-sep">·</span>
+        <span>Bainbridge Island</span>
+      </div>
+    </div>
+    <div>
+      <div class="hero-collage">
+        <div class="collage-img" data-gallery-index="1">
+          <img src="images from rover/original (1).webp" alt="Dogs playing in a sunny field" style="object-position: 58% 55%" fetchpriority="high" />
+        </div>
+        <div class="collage-img" data-gallery-index="2">
+          <img src="images from rover/original (2).webp" alt="Dogs on beach at golden hour" style="object-position: 44% 39%" />
+        </div>
+        <div class="collage-img" data-gallery-index="3">
+          <img src="images from rover/original (3).webp" alt="Bulldog asleep by wood stove" style="object-position: 38% 62%" />
+        </div>
+        <div class="collage-img" data-gallery-index="4">
+          <img src="images from rover/original (4).webp" alt="Owner laughing with two dogs" style="object-position: 57% 41%" />
+        </div>
+        <div class="collage-img" data-gallery-index="65">
+          <img src="images from rover/original (65).webp" alt="Tiny Yorkie with warm lighting" style="object-position: 56% 48%" />
+        </div>
+      </div>
+      <div class="collage-footer" style="position:relative; margin-top: 16px; text-align: center;">
+        <button class="btn-secondary" id="openGalleryBtn">
+          View all photos
+          <span class="ic">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M4 1.5L8.5 6L4 10.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<div class="section-wrap reveal" id="services">
+  <div class="services-head">
+    <div class="eyebrow">What we offer</div>
+    <h2 class="section-h2">Care for every dog,<br>every need.</h2>
+    <p class="section-sub">Three types of service, all rooted in warmth, routine, and genuine attention.</p>
+  </div>
+  <div class="cards-grid">
+    <div class="svc-card reveal">
+      <div class="svc-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      </div>
+      <div class="svc-name">Doggy Day Care</div>
+      <p class="svc-desc">A full day in our home: yard time, socialization, naps, and real attention.</p>
+      <div class="svc-price"><span class="svc-price-num">$50</span><span class="svc-price-unit">/ day</span></div>
+    </div>
+    <div class="svc-card reveal reveal-delay-1">
+      <div class="svc-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <div class="svc-name">Boarding</div>
+      <p class="svc-desc">Overnight stays in our home, sleeping with the family, morning walks.</p>
+      <div class="svc-price"><span class="svc-price-num">$70</span><span class="svc-price-unit">/ night</span></div>
+    </div>
+    <div class="svc-card reveal reveal-delay-2">
+      <div class="svc-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+      </div>
+      <div class="svc-name">House Sitting</div>
+      <p class="svc-desc">We stay in your home, keeping every routine exactly as your dog knows it.</p>
+      <div class="svc-price"><span class="svc-price-num">$140</span><span class="svc-price-unit">/ night</span></div>
+    </div>
+  </div>
+  <div class="services-footer-link reveal">
+    <a href="#rates">View full pricing: holidays, additional dogs, extended stays &amp; more ↓</a>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div class="section-wrap reveal" id="about" style="background: rgba(93,114,86,0.06);">
+  <div class="about-inner">
+    <div class="about-copy">
+      <div class="eyebrow">About us</div>
+      <h2>A family that lives for this.</h2>
+      <p>We're a young family on Bainbridge Island: two kids, a baby, and more dogs through our door than we can count. Every dog we care for is treated exactly like one of ours.</p>
+    </div>
+    <div class="about-photo">
+      <img src="images from rover/original.webp" alt="The Island Paws family" style="object-position: 53% 47%" />
+    </div>
+  </div>
+</div>
+
+<!-- TYPICAL DAY -->
+<div class="section-wrap reveal" id="typical-day">
+  <div class="day-head">
+    <div class="eyebrow">Daily routine</div>
+    <h2 class="section-h2">A typical day<br>with the pack.</h2>
+  </div>
+  <div class="day-grid">
+    <div class="day-card reveal">
+      <div class="day-time">6 – 8 am</div>
+      <div class="day-title">Wake Up &amp; Breakfast</div>
+      <div class="day-desc">Morning potty, fresh food, and a calm start. We make breakfast for everyone together.</div>
+    </div>
+    <div class="day-card reveal reveal-delay-1">
+      <div class="day-time">8 am – 12 pm</div>
+      <div class="day-title">Outdoor Time</div>
+      <div class="day-desc">The fenced yard is theirs. Ball throwing, pack play, garden roaming. Rain or shine.</div>
+    </div>
+    <div class="day-card reveal reveal-delay-2">
+      <div class="day-time">12 – 4 pm</div>
+      <div class="day-title">Lounge &amp; Rest</div>
+      <div class="day-desc">Dogs follow us inside, supervise the kitchen, and find their spot among dedicated dog beds.</div>
+    </div>
+    <div class="day-card reveal">
+      <div class="day-time">4 – 6 pm</div>
+      <div class="day-title">Kids Come Home</div>
+      <div class="day-desc">Energy picks back up. Kids and dogs: the best combination for afternoon chaos and cuddles.</div>
+    </div>
+    <div class="day-card reveal reveal-delay-1">
+      <div class="day-time">6 – 8 pm</div>
+      <div class="day-title">Dinner &amp; Wind Down</div>
+      <div class="day-desc">Evening meal, a movie, snuggles on the couch. Everyone settles in for a calm end to the day.</div>
+    </div>
+    <div class="day-card reveal reveal-delay-2">
+      <div class="day-time">By 10 pm</div>
+      <div class="day-title">Lights Out</div>
+      <div class="day-desc">Consistent bedtime, calm environment. Your dog always knows what comes next, just like home.</div>
+    </div>
+  </div>
+</div>
+
+<!-- REVIEWS -->
+<div class="section-wrap reveal" id="reviews">
+  <div class="reviews-head">
+    <div class="eyebrow">What families say</div>
+    <h2 class="section-h2"><em>4.9</em> stars on Rover</h2>
+    <div class="reviews-head-sub">
+      <div class="rating-stars-row" aria-label="4.9 out of 5 stars">
+        <svg aria-hidden="true" class="rstar" width="32" height="32" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="var(--sage)"/></svg>
+        <svg aria-hidden="true" class="rstar" width="32" height="32" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="var(--sage)"/></svg>
+        <svg aria-hidden="true" class="rstar" width="32" height="32" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="var(--sage)"/></svg>
+        <svg aria-hidden="true" class="rstar" width="32" height="32" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="var(--sage)"/></svg>
+        <!-- Partial star: 90% filled for 4.9 rating -->
+        <svg aria-hidden="true" class="rstar" width="32" height="32" viewBox="0 0 24 24">
+          <defs><clipPath id="rv-star-clip"><rect x="0" y="0" width="21.6" height="24"/></clipPath></defs>
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#C4C4C4"/>
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="var(--sage)" clip-path="url(#rv-star-clip)"/>
+        </svg>
+      </div>
+      <p class="reviews-source">Star Sitter</p>
+    </div>
+  </div>
+  <div class="reviews-grid">
+    <div class="rv span-2 reveal">
+      <div class="rv-stars">★★★★★</div>
+      <p class="rv-quote">"Trenton and Jordan took incredible care of our home and our sweet Pineapple. They sent videos and photos multiple times a day. They even prepped the house for our next sitter arriving after them. Will definitely book again whenever we need dog sitting."</p>
+      <div class="rv-author"><div class="rv-av">E</div><div><div class="rv-name">Emily G.</div><div class="rv-tag">House Sitting · Apr 2026</div></div></div>
+    </div>
+    <div class="rv reveal">
+      <div class="rv-stars">★★★★★</div>
+      <p class="rv-quote">"So reassuring knowing our pups are in such caring hands. Daily photos, happy dogs. Our only concern? They might not want to come back home!"</p>
+      <div class="rv-author"><div class="rv-av">T</div><div><div class="rv-name">Thomas M.</div><div class="rv-tag">Boarding · Apr 2026</div></div></div>
+    </div>
+    <div class="rv reveal reveal-delay-1">
+      <div class="rv-stars">★★★★★</div>
+      <p class="rv-quote">"Blue and Pablo were so well cared for and clearly loved. Their property is perfect for dogs. Incredibly kind and communicative. We will absolutely be rebooking."</p>
+      <div class="rv-author"><div class="rv-av">J</div><div><div class="rv-name">Jennifer H.</div><div class="rv-tag">Boarding · Apr 2026</div></div></div>
+    </div>
+  </div>
+
+  <!-- Expandable reviews -->
+  <div class="reviews-expand" id="reviewsExpand">
+    <div class="reviews-expand-inner">
+      <div class="reviews-filters-row" id="reviewsFiltersRow">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="day-care">Day Care</button>
+        <button class="filter-btn" data-filter="boarding">Boarding</button>
+        <button class="filter-btn" data-filter="house-sitting">House Sitting</button>
+      </div>
+      <div class="reviews-all-grid" id="reviewsAllGrid">
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Jamie R.</span><span class="mr-svc b">Boarding</span><span class="mr-date">May 12, 2026</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Thanks for watching Rocky again!!</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Thomas M.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Apr 28, 2026</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Trenton &amp; Jordan were fantastic sitters. It's reassuring knowing our pups are in such caring, loving and responsible hands. We were sent pictures almost everyday. Our pups were extremely happy — our only concern was that they may not want to come back home. We will definitely be leaving our dogs with them again.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Jennifer H.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Apr 19, 2026</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">We had such a wonderful experience! Blue and Pablo were so well cared for and clearly loved during their stay. Both dogs had an amazing time, with plenty of exercise and play. Their home and property are perfect for dogs, and it's so easy to see how much Trenton and Jordan genuinely love the dogs they watch. We will absolutely be rebooking — highly recommend!</p></div>
+        <div class="mr" data-svc="house-sitting"><div class="mr-meta"><span class="mr-name">Emily G.</span><span class="mr-svc hs">House Sitting</span><span class="mr-date">Apr 11, 2026</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Trenton and Jordan took incredible care of our home and our sweet Pineapple. They sent videos and photos multiple times a day and even prepped the house for our next sitter arriving after them. Will definitely see if they're available next time.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Jamie R.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Apr 6, 2026</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Another great visit.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Timothy S.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Mar 28, 2026</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Trenton and Jordan provided excellent care for our pup. She is shy at first and they were able to make a quick connection with her.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Nina M.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Mar 21, 2026</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">What an amazing place! I'm so happy I found it! I liked it so much I'll probably be using it for doggie daycare as well, and I'm recommending this place to my friends. What a hidden gem!</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Jason H.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Mar 9, 2026</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Trenton &amp; Jordan are great! Our pup had a fun time!</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Amy B.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Feb 24, 2026</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Our dog Norman had a wonderful stay with Trenton and Jordan. We really appreciate that they took time to send pictures and video during the stay which really put our mind at ease. Would definitely book again!</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Jamie R.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Feb 24, 2026</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Another great stay!! Thanks for always being available.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Betsy M.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Feb 21, 2026</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">They were amazing! We received so many fun pics and videos that showed off what a great time Bertie was having. Would definitely book again.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Ashley &amp; Jonathan S.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Feb 20, 2026</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Really wonderful communication and care! Pendry came home pooped from all the play time!! I think he had the time of his life!</p></div>
+        <div class="mr" data-svc="day-care"><div class="mr-meta"><span class="mr-name">Joan L.</span><span class="mr-svc dc">Day Care</span><span class="mr-date">Feb 7, 2026</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">She did a great job with our big dog. Seems very knowledgeable about dogs and their behavior. Will use again.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Yolanda M.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Jan 14, 2026</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Jordan and Trenton were awesome. We got tons of communication with photos and videos for the duration of the stay and when we picked our pup up he was super happy and tired out. Will definitely book again!</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Jannat S.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Dec 21, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Trenton and Jordan took exceptional care of Bagheera and Baloo. They sent tons of pictures and updates every single day, which gave us so much peace of mind. We couldn't have asked for better sitters and would trust them again without hesitation.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Skylar F.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Dec 8, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Jordan and Trenton are truly wonderful people and exceptional dog sitters! My baby Quentin is a high-energy Husky who can definitely be a handful. With so much grace and patience, they welcomed our fluffy boy into their home and loved him as if he were their own. He had such an amazing time that he slept the entire car ride home! I will absolutely be recommending them to all my dog-loving friends.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Cherith P.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Dec 2, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Trenton and Jordan are truly amazing! They really took their time to get to know Zeus, make introductions with the other dogs, and watch how they interact. Their place is well set up for dogs who love to sniff and explore — every video I received, the dogs were having a blast. 10/10 recommend!</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Andrea C.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Dec 2, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Trenton and Jordan took great care of our senior pup, Emma. She is mostly blind and needs to be watched closely. They made sure she got the attention she needed and was kept cozy by her favorite spot near their fireplace. Thank you so much!</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Kathryn W.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Dec 1, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Trenton and Jordan were absolutely incredible!! It was our first time leaving our 6-month-old mini Aussie and we were so nervous. They had great communication and sent us pictures and videos multiple times a day. Bosun had the absolute best time and came home happy and wiped out from play. If you're considering booking, do it!</p></div>
+        <div class="mr" data-svc="day-care"><div class="mr-meta"><span class="mr-name">Olivia F.</span><span class="mr-svc dc">Day Care</span><span class="mr-date">Dec 1, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Easy to communicate with, reliable, accepted a last minute request. Attentive to my dog's needs and the photos were much appreciated. I would definitely use Trenton and Jordan again!</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Alyse N.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Nov 17, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Flex has an amazing time visiting Trenton and Jordan! He comes back happy and tired from so much play time. He's already looking forward to next time.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Jamie R.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Nov 4, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Great stay for Rocky. Would highly recommend if looking for a sitter on the Island.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Nathan H.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Nov 3, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">They took great care of my dog, let me visit before to get a feel and answered all my questions. They sent consistent updates, photos, and videos. I wanted a space for my dog to have open areas to play and be stimulated while I was away and he definitely got that. Will be booking again.</p></div>
+        <div class="mr" data-svc="day-care"><div class="mr-meta"><span class="mr-name">Anika B.</span><span class="mr-svc dc">Day Care</span><span class="mr-date">Oct 27, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Thank you! Bonnie came back tired and happy!</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">River H.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Oct 22, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">The most amazing dog sitters! They treated my pup like family and she came home a happy camper. Thank you to Trenton &amp; Jordan.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Andrea C.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Oct 13, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Trenton and Jordan took great care of my pup Emma. They gave her lots of love and were careful with her outside — she is a senior pet. They provided lots of pictures and managed her medications with no problem.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">John C.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Oct 13, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Trenton and Jordan saved us with a last minute request and took wonderful care of Annie!</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Catherine E.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Oct 11, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Trenton and Jordan were great! They have a great space for the dogs to run around and they are so caring. Pablo was nervous when first dropped off but Trenton and Jordan did a great job keeping me posted with how he was doing — soon enough he had settled in and relaxed.</p></div>
+        <div class="mr" data-svc="day-care"><div class="mr-meta"><span class="mr-name">Lanewhat</span><span class="mr-svc dc">Day Care</span><span class="mr-date">Oct 2, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Daisy got great care, plenty of play, and can't wait to go back.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Jenna M.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Oct 1, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">King was so lucky to have boarding with Trenton &amp; Jordan at the farm. Super dog friendly, big space to roam and get in both human affection and social time with other pups!</p></div>
+        <div class="mr" data-svc="day-care"><div class="mr-meta"><span class="mr-name">Jacqueline G.</span><span class="mr-svc dc">Day Care</span><span class="mr-date">Sep 29, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Jordan and Trenton took care of Bella with loving care. I received photos daily of Bella's time with them. Bella seemed happy with Jordan, Trenton, Tahoma, and the other dogs.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">David A.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Sep 25, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Trenton and Jordan care for Zoey so well.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Alyse N.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Sep 24, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Flex enjoyed his stay and we appreciated the updates and videos!!</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Rita B.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Sep 24, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Trenton and Jordan took great care of our dog. Their place has lots of fenced area for the dogs and they also welcome them into their home. They kept us posted with photos and responded instantly to all communications. We will happily use them again.</p></div>
+        <div class="mr" data-svc="day-care"><div class="mr-meta"><span class="mr-name">Sarafina</span><span class="mr-svc dc">Day Care</span><span class="mr-date">Sep 19, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Basho had a great time there.</p></div>
+        <div class="mr" data-svc="day-care"><div class="mr-meta"><span class="mr-name">Laura H.</span><span class="mr-svc dc">Day Care</span><span class="mr-date">Sep 16, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Love these folks! So kind and clearly love animals. Beautiful setting and I know my dog gets love and attention while he's there. Highly recommend!!</p></div>
+        <div class="mr" data-svc="day-care"><div class="mr-meta"><span class="mr-name">John T.</span><span class="mr-svc dc">Day Care</span><span class="mr-date">Sep 1, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Dino had such an amazing time. Will definitely stop by again. Highly recommend.</p></div>
+        <div class="mr" data-svc="day-care"><div class="mr-meta"><span class="mr-name">Maureen G.</span><span class="mr-svc dc">Day Care</span><span class="mr-date">Aug 29, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Trenton &amp; Jordan are amazing — Loki returned from two stays with them happy and tired. They are extremely accommodating around scheduling and their property is perfect for a fun and safe pet stay. I will use them again.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Richard S.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Aug 29, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Pepper had a fantastic stay — very attentive, responsive, and welcoming hosts!</p></div>
+        <div class="mr" data-svc="day-care"><div class="mr-meta"><span class="mr-name">Lara M.</span><span class="mr-svc dc">Day Care</span><span class="mr-date">Aug 29, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Trenton and Jordan were fantastic! We really appreciated how flexible they were with our booking. Rory had a great time and enjoyed making new friends.</p></div>
+        <div class="mr" data-svc="day-care"><div class="mr-meta"><span class="mr-name">Stephen C.</span><span class="mr-svc dc">Day Care</span><span class="mr-date">Aug 28, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Josie had a great day with Trent and Jordan. They are very attentive to the dogs' needs and really enjoy having them around.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Brian I.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Aug 24, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Great communication in preparation for and during Xavier's 2-night stay. Recommended.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Jillian S.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Aug 10, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Our Gus was well loved and so tired after a visit with Jordan and Trenton. Gus is already asking to go back :)</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Sandra K.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Aug 4, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Jordan, Trenton, and their family were beyond accommodating — both with flexibility in scheduling and providing peace of mind that our pups had the best time. Our dogs are tuckered out from an awesome few days of playing and snuggles. Highly recommend this lovely family!</p></div>
+        <div class="mr" data-svc="day-care"><div class="mr-meta"><span class="mr-name">Lanewhat</span><span class="mr-svc dc">Day Care</span><span class="mr-date">Jul 31, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Trenton and Jordan were our lifesavers. They took Daisy on short notice and let us drop her off at 7am! We got plenty of photos of a happy Daisy throughout the day. As soon as Daisy got home, she happily passed out, exhausted from running around and exploring their property.</p></div>
+        <div class="mr" data-svc="day-care"><div class="mr-meta"><span class="mr-name">Katie K.</span><span class="mr-svc dc">Day Care</span><span class="mr-date">Jul 15, 2025</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">We had a great experience with Trenton &amp; Jordan. They were awesome about checking in regularly and sent plenty of picture updates. Kona made a new little puppy friend and had the best time running around their beautiful property. It's clear he was well cared for and had a blast — highly recommend!</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Lindsey W.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Aug 20, 2024</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Trenton and Jordan care so much about their furry guests, and speak dog fluently. Thank you for taking such care of Mara Husky.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Stacy S.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Jul 18, 2024</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">We left our dogs with Trenton and Jordan for a three-week stay. They were in good hands. Lots of outdoor play and we loved getting the pictures. I highly recommend Trenton and Jordan.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Dessy S.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Jul 15, 2024</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Trenton and Jordan helped me out in a pinch when my usual dogsitter canceled. My dogs enjoyed their stay and came home happy and tired. I really appreciated the photos and videos. Will not hesitate to book them again.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Jacqui H.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Jun 11, 2024</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">From our first interaction with Jordan and Trenton I knew Tucker was in fantastic hands! We felt so comfortable leaving Tucker with them for a week. Jordan sent me pictures and videos every day and it was clear Tucker was having the time of his life with the other dogs — and getting plenty of love from the people too! Would highly recommend.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Katharine R.</span><span class="mr-svc b">Boarding</span><span class="mr-date">May 10, 2024</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Huck had the best time with Trent and Jordan. He made lots of new doggie friends and was taken care of every moment. Lots of cute pics and messages helped me feel like Huck was happy and safe the whole time.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Nina B.</span><span class="mr-svc b">Boarding</span><span class="mr-date">May 3, 2024</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Loki had a great time as always and he is wore out. He loves playing with all the other puppies and I love that the group is always supervised.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Gabriela P.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Apr 23, 2024</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Trenton &amp; Jordan were great! They were responsive, patient with my pup as he got comfortable as a first-time guest, and it was obvious Clutch had a wonderful time during his stay. Highly recommend!</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Bryton W.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Apr 23, 2024</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Lambeau had an absolute blast! Jordan and Trenton were amazing with keeping us updated and sent many photos and videos throughout his stay. We will definitely stay again!!</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Kayla K.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Apr 22, 2024</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Ketch LOVES T and J and his time with them. I was so grateful for the love and care he received during his boarding while we were away, as well as the updates they shared. He will definitely be back anytime we are in need of care.</p></div>
+        <div class="mr" data-svc="day-care"><div class="mr-meta"><span class="mr-name">Michael S.</span><span class="mr-svc dc">Day Care</span><span class="mr-date">Apr 12, 2024</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Trixie spent a pleasant afternoon with Trenton and Jordan. She likes the fact that she can come and go — wandering outside in the grassy pen or resting in the warm kitchen.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Leanne E.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Apr 10, 2024</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Excellent, loving care of our two Shepherds. Thank you Trenton and Jordan!</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">James J. G.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Mar 31, 2024</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">So much room for Lisa to play! Trenton and Jordan are so nice and so hospitable and obviously love dogs. Very professional and highly recommended!</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Michael S.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Mar 24, 2024</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Trenton and Jordan have a great place: a nice big fenced yard for running and warm quiet indoor spaces for resting. Our older dog enjoys both the inside and outside spaces — with a big smile on her face.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Nina B.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Mar 21, 2024</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Trenton and Jordan are great, especially with large dogs. Loki loves going and playing with the other dogs. And it's a bonus that he is able to hang out with their kids as well.</p></div>
+        <div class="mr" data-svc="day-care"><div class="mr-meta"><span class="mr-name">Lyn F.</span><span class="mr-svc dc">Day Care</span><span class="mr-date">Mar 16, 2024</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Muggzy had a great day with Trenton and Jordan! They genuinely seemed to enjoy him and understand his needs. He didn't want to leave! We hope to have him visit often.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Lindsey W.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Mar 10, 2024</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Trenton and Jordan are amazing! Our husky loved her time with them — so content, comfortable and perfectly worn out at pick up. It is obvious they are incredibly intuitive with dogs, speak dog, and love them all. Mara will be back!</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Cole R.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Feb 15, 2024</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Pico (4mo mini aussiedoodle) had a great stay. We did a daycare day ahead of the boarding weekend, so Pico was familiar with the space. It was a great opportunity for Pico to socialize with other dogs. The large outdoor fenced area is a great perk. Highly recommended.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Christine B.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Feb 6, 2024</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Trenton took great care of our dog for a week. The fully fenced yard and cozy home was a perfect fit. We received lots of updates and photos every day including photos of walks and playtime with other dogs.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Rob M.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Feb 4, 2024</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Our elderly dog loved spending the day there, like a dog vacation — easy access to a large fenced yard, lots of gentle attention, and comfortable places to take naps. Highly recommended!!</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Raven A.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Jan 28, 2024</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Trent was great with Hazel — caring, kind, fun, and responsible. She obviously adored him. Will definitely book again.</p></div>
+        <div class="mr" data-svc="day-care"><div class="mr-meta"><span class="mr-name">Avery D.</span><span class="mr-svc dc">Day Care</span><span class="mr-date">Jan 26, 2024</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Our two dogs spent 9 hours with Trenton in what we believe to be a nice dog-loving environment. Trenton had great communication while working out the details of the visit. A little more attention to detail around updates and water access would have made this a 5-star experience, and we are willing to book with Trenton again.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Jennifer K.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Jan 24, 2024</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Chester had a blast at Trenton's! Trenton and his family took excellent care of Chester — they have an amazing yard and also took walks to the beach. Chester did not want to leave when we went to pick him up! Highly recommend.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Seth L.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Jan 3, 2024</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">By far the best experience I have had on Rover. A lovely space with lots of room for the pups to run around. Flexibility, prompt communication, and an obvious care for our dog made me and my wife feel totally at ease. We got lots of daily updates, fantastic photos, and a rundown on the activities of the day. I've never felt more comfortable leaving my dog anywhere. Absolutely our new go-to.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Jessie N.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Dec 30, 2023</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Great communication, great fun week for our pup. 10/10 will use again.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Holly J.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Dec 12, 2023</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Alastor enjoyed his stay and we appreciated all the updates and photos. We will book with Trenton again.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">David A.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Nov 27, 2023</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Trenton was well prepared to watch my full-size German Shepherd puppy. Family took good care of my dog. Lots of walks every day. Great communication when an unexpected situation came up.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Jenn N.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Nov 20, 2023</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Trent did a wonderful job watching my dog Dexter. He sent photos and regular updates and I could tell Dexter was having a blast. I highly recommend Trent.</p></div>
+        <div class="mr" data-svc="boarding"><div class="mr-meta"><span class="mr-name">Jordan V.</span><span class="mr-svc b">Boarding</span><span class="mr-date">Nov 20, 2023</span></div><div class="mr-stars">★★★★★</div><p class="mr-quote">Trenton is so thoughtful and intentional with every animal he cares for, especially dogs! They go for runs in the Grand Forest, they play with his kiddos, and they love to cuddle by his wood stove. If you are looking for a genuinely caring human to watch your dogs, this guy is it.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="reviews-open-btn reveal">
+    <button class="btn-all-reviews" id="openReviews" aria-expanded="false" aria-controls="reviewsExpand">
+      <span class="btn-reviews-text">See all reviews</span>
+      <span class="ic">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2.5L9.5 7L5 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+    </button>
+  </div>
+</div>
+
+<!-- RATES -->
+<div class="section-wrap reveal" id="rates">
+  <div style="margin-bottom:44px;">
+    <div class="eyebrow">Full pricing</div>
+    <h2 class="section-h2">Rates &amp;<br>what's included.</h2>
+  </div>
+
+  <!-- Doggy Day Care -->
+  <div class="rate-block reveal">
+    <div class="rate-block-head">
+      <div>
+        <div class="rate-block-meta">In our home · Drop off mornings, pick up evenings</div>
+        <div class="rate-block-name">Doggy Day Care</div>
+      </div>
+      <div class="rate-base">
+        <div class="rate-base-label">Base rate</div>
+        <div class="rate-base-num">$50</div>
+        <div class="rate-base-unit">per day</div>
+      </div>
+    </div>
+    <div class="rate-grid">
+      <div class="rate-card featured reveal"><div class="rate-card-label">Base Rate<small>1 dog · standard days</small></div><div class="rate-card-price">$50<small>/day</small></div></div>
+      <div class="rate-card reveal reveal-delay-1"><div class="rate-card-label">Holiday Rate<small>Major US holidays</small></div><div class="rate-card-price">$60<small>/day</small></div></div>
+      <div class="rate-card reveal reveal-delay-2"><div class="rate-card-label">Additional Dog<small>Each extra dog, same booking</small></div><div class="rate-card-price">+$40<small>/dog/day</small></div></div>
+      <div class="rate-card reveal reveal-delay-3"><div class="rate-card-label">Puppy Rate<small>Under 1 year old</small></div><div class="rate-card-price">$55<small>/day</small></div></div>
+    </div>
+  </div>
+
+  <!-- Boarding -->
+  <div class="rate-block reveal">
+    <div class="rate-block-head">
+      <div>
+        <div class="rate-block-meta">In our home · Up to 8 pets · Large fenced yard</div>
+        <div class="rate-block-name">Boarding</div>
+      </div>
+      <div class="rate-base">
+        <div class="rate-base-label">Base rate</div>
+        <div class="rate-base-num">$70</div>
+        <div class="rate-base-unit">per night</div>
+      </div>
+    </div>
+    <div class="rate-grid">
+      <div class="rate-card featured reveal"><div class="rate-card-label">Base Rate<small>1 dog · standard nights</small></div><div class="rate-card-price">$70<small>/night</small></div></div>
+      <div class="rate-card reveal reveal-delay-1"><div class="rate-card-label">Holiday Rate<small>Major US holidays</small></div><div class="rate-card-price">$84<small>/night</small></div></div>
+      <div class="rate-card reveal reveal-delay-2"><div class="rate-card-label">Additional Dog<small>Each extra dog, same booking</small></div><div class="rate-card-price">+$56<small>/dog/night</small></div></div>
+      <div class="rate-card reveal reveal-delay-3"><div class="rate-card-label">Puppy Rate<small>Under 1 year old</small></div><div class="rate-card-price">$77<small>/night</small></div></div>
+      <div class="rate-card reveal"><div class="rate-card-label">Extended Stay<small>14+ consecutive nights</small></div><div class="rate-card-price">$50<small>/night</small></div></div>
+      <div class="rate-card reveal reveal-delay-1"><div class="rate-card-label">Pick-up &amp; Drop-off<small>Round trip, Bainbridge Island</small></div><div class="rate-card-price">+$50<small>/trip</small></div></div>
+      <div class="rate-card reveal reveal-delay-2"><div class="rate-card-label">Extended Care<small>Additional daytime hours</small></div><div class="rate-card-price">50–100%<small>of nightly rate</small></div></div>
+    </div>
+  </div>
+
+  <!-- House Sitting -->
+  <div class="rate-block reveal">
+    <div class="rate-block-head">
+      <div>
+        <div class="rate-block-meta">In your home · Your dog never leaves their routine</div>
+        <div class="rate-block-name">House Sitting</div>
+      </div>
+      <div class="rate-base">
+        <div class="rate-base-label">Base rate</div>
+        <div class="rate-base-num">$140</div>
+        <div class="rate-base-unit">per night</div>
+      </div>
+    </div>
+    <div class="rate-grid">
+      <div class="rate-card featured reveal"><div class="rate-card-label">Base Rate<small>1 dog · standard nights</small></div><div class="rate-card-price">$140<small>/night</small></div></div>
+      <div class="rate-card reveal reveal-delay-1"><div class="rate-card-label">Holiday Rate<small>Major US holidays</small></div><div class="rate-card-price">$160<small>/night</small></div></div>
+      <div class="rate-card reveal reveal-delay-2"><div class="rate-card-label">Additional Dog<small>Each extra dog, same booking</small></div><div class="rate-card-price">+$40<small>/dog/night</small></div></div>
+      <div class="rate-card reveal reveal-delay-3"><div class="rate-card-label">Puppy Rate<small>Under 1 year old</small></div><div class="rate-card-price">$154<small>/night</small></div></div>
+      <div class="rate-card reveal"><div class="rate-card-label">Extended Stay<small>7+ consecutive nights</small></div><div class="rate-card-price">$120<small>/night</small></div></div>
+      <div class="rate-card reveal reveal-delay-1"><div class="rate-card-label">Extended Care<small>Additional daytime hours</small></div><div class="rate-card-price">50–100%<small>of nightly rate</small></div></div>
+    </div>
+    <div class="rate-subsection reveal">
+      <div class="rate-subsection-label">Cat care — house sitting only</div>
+      <div class="rate-grid">
+        <div class="rate-card"><div class="rate-card-label">Cat Base Rate<small>1 cat · standard nights</small></div><div class="rate-card-price">$98<small>/night</small></div></div>
+        <div class="rate-card"><div class="rate-card-label">Additional Cat<small>Each extra cat, same booking</small></div><div class="rate-card-price">+$30<small>/cat/night</small></div></div>
+      </div>
+    </div>
+    <div class="rate-note reveal">All rates are for one dog. Exact pricing may vary based on your specific needs. Reach out through Rover for a precise quote for multi-pet households or special schedules.</div>
+  </div>
+</div>
+
+<!-- BOOKING CTA -->
+<section class="reveal" id="booking">
+  <div class="booking">
+    <div class="eyebrow">Ready to book?</div>
+    <h2>Your dog,<br><em>at home.</em></h2>
+    <p>Reach out on Rover or send us a message. We'd love to meet your dog before the first stay.</p>
+    <a href="https://www.rover.com/members/trenton-jordan-r-family-doggie-home/" target="_blank" rel="noopener noreferrer" class="btn-primary">
+      Book on Rover
+      <span class="btn-arrow">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H4.5M11.5 2.5V9.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="f-logo">Island Paws</a>
+  <span class="f-copy">© 2026 Island Paws · Bainbridge Island, WA</span>
+  <a href="https://www.rover.com/members/trenton-jordan-r-family-doggie-home/" target="_blank" rel="noopener noreferrer" class="f-link">View on Rover →</a>
+</footer>
+
+</div><!-- /.page-wrap -->
+
+<!-- GALLERY DRAWER -->
+<div class="gd-backdrop" id="gdBackdrop"></div>
+<div class="gd" id="galleryDrawer" aria-hidden="true" role="dialog" aria-label="Photo gallery">
+  <div class="gd-header">
+    <span class="gd-title">All Photos <span class="gd-count">117</span></span>
+    <button class="gd-close" id="gdClose" aria-label="Close gallery">✕</button>
+  </div>
+  <div class="gd-grid-wrap" id="gdGridWrap">
+    <div class="gd-grid" id="gdGrid"></div>
+  </div>
+  <div class="gd-full-wrap" id="gdFullWrap" style="display:none">
+    <button class="gd-back" id="gdBack">← Back to photos</button>
+    <div class="gd-full-scroll">
+      <img class="gd-full-img" id="gdFullImg" src="" alt="" />
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const IMAGES = ['images from rover/original.webp'];
+  for (let i = 1; i <= 100; i++) IMAGES.push(`images from rover/original (${i}).webp`);
+  ['2026-05-15T172736.354','2026-05-15T172740.745','2026-05-15T172744.887',
+   '2026-05-15T172748.990','2026-05-15T172753.488','2026-05-15T172757.941',
+   '2026-05-15T172802.825','2026-05-15T172807.140','2026-05-15T172811.477',
+   '2026-05-15T172816.854','2026-05-15T172821.101','2026-05-15T172830.150',
+   '2026-05-15T172834.992','2026-05-15T172839.159','2026-05-15T172846.779',
+   '2026-05-15T172853.575'
+  ].forEach(ts => IMAGES.push(`images from rover/original - ${ts}.webp`));
+
+  const drawer   = document.getElementById('galleryDrawer');
+  const backdrop = document.getElementById('gdBackdrop');
+  const gridWrap = document.getElementById('gdGridWrap');
+  const grid     = document.getElementById('gdGrid');
+  const fullWrap = document.getElementById('gdFullWrap');
+  const fullImg  = document.getElementById('gdFullImg');
+  const closeBtn = document.getElementById('gdClose');
+  const backBtn  = document.getElementById('gdBack');
+  let gridScrollTop = 0, thumbsBuilt = false;
+
+  function buildThumbs() {
+    if (thumbsBuilt) return; thumbsBuilt = true;
+    IMAGES.forEach((src, i) => {
+      const div = document.createElement('div'); div.className = 'gd-thumb';
+      const img = document.createElement('img'); img.src = src; img.alt = ''; img.loading = 'lazy';
+      div.appendChild(img); div.addEventListener('click', () => openFull(i)); grid.appendChild(div);
+    });
+  }
+
+  function openDrawer(startIndex) {
+    buildThumbs(); showGrid();
+    drawer.classList.add('open'); drawer.setAttribute('aria-hidden','false');
+    backdrop.classList.add('open'); document.body.style.overflow = 'hidden';
+    if (startIndex != null) requestAnimationFrame(() => {
+      const thumb = grid.children[startIndex];
+      if (thumb) { const wt = gridWrap.getBoundingClientRect().top; const tt = thumb.getBoundingClientRect().top; gridWrap.scrollTop = Math.max(0, tt - wt + gridWrap.scrollTop - 20); }
+    });
+  }
+
+  function closeDrawer() {
+    drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true');
+    backdrop.classList.remove('open'); document.body.style.overflow = '';
+  }
+
+  function showGrid() { gridWrap.style.display = ''; fullWrap.style.display = 'none'; }
+
+  function openFull(index) {
+    gridScrollTop = gridWrap.scrollTop; gridWrap.style.display = 'none';
+    fullWrap.style.display = 'flex'; fullImg.src = IMAGES[index]; fullImg.alt = `Photo ${index + 1}`;
+  }
+
+  backBtn.addEventListener('click', () => { showGrid(); requestAnimationFrame(() => { gridWrap.scrollTop = gridScrollTop; }); });
+  closeBtn.addEventListener('click', closeDrawer);
+  backdrop.addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape' || !drawer.classList.contains('open')) return;
+    fullWrap.style.display !== 'none' ? (showGrid(), requestAnimationFrame(() => { gridWrap.scrollTop = gridScrollTop; })) : closeDrawer();
+  });
+
+  document.querySelectorAll('.collage-img[data-gallery-index]').forEach(el => {
+    el.setAttribute('role', 'button');
+    el.setAttribute('tabindex', '0');
+    el.setAttribute('aria-label', el.querySelector('img')?.alt || 'Open photo in gallery');
+    el.addEventListener('click', () => openDrawer(parseInt(el.dataset.galleryIndex)));
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openDrawer(parseInt(el.dataset.galleryIndex)); }
+    });
+  });
+
+  document.getElementById('openGalleryBtn').addEventListener('click', () => openDrawer(0));
+  window.openGallery = openDrawer;
+})();
+</script>
+
+<script>
+  // Scroll reveal
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.07, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Reviews expand/collapse
+  const openBtn    = document.getElementById('openReviews');
+  const expand     = document.getElementById('reviewsExpand');
+  const filterBtns = document.querySelectorAll('#reviewsFiltersRow .filter-btn');
+  const mrCards    = document.querySelectorAll('#reviewsAllGrid .mr');
+  const reviewsBtnText = openBtn.querySelector('.btn-reviews-text');
+  let expandOpen = false;
+
+  openBtn.addEventListener('click', () => {
+    expandOpen = !expandOpen;
+    expand.classList.toggle('open', expandOpen);
+    openBtn.setAttribute('aria-expanded', expandOpen ? 'true' : 'false');
+    reviewsBtnText.textContent = expandOpen ? 'Close reviews' : 'See all reviews';
+  });
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const f = btn.dataset.filter;
+      mrCards.forEach(card => { card.classList.toggle('hidden', f !== 'all' && card.dataset.svc !== f); });
+    });
+  });
+
+  // Mobile hamburger menu
+  const hamburger = document.getElementById('navHamburger');
+  const mobileNav = document.getElementById('mobileNav');
+  let mobileOpen = false;
+
+  const hamOpen  = `<svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true"><rect y="0.25" width="16" height="1.5" rx="0.75" fill="currentColor"/><rect y="5.25" width="16" height="1.5" rx="0.75" fill="currentColor"/><rect y="10.25" width="16" height="1.5" rx="0.75" fill="currentColor"/></svg>`;
+  const hamClose = `<svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M1.5 1.5L11.5 11.5M11.5 1.5L1.5 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`;
+
+  function openMobileNav() {
+    mobileOpen = true;
+    hamburger.setAttribute('aria-expanded', 'true');
+    hamburger.setAttribute('aria-label', 'Close menu');
+    hamburger.innerHTML = hamClose;
+    mobileNav.classList.add('open');
+    mobileNav.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeMobileNav() {
+    mobileOpen = false;
+    hamburger.setAttribute('aria-expanded', 'false');
+    hamburger.setAttribute('aria-label', 'Open menu');
+    hamburger.innerHTML = hamOpen;
+    mobileNav.classList.remove('open');
+    mobileNav.setAttribute('aria-hidden', 'true');
+  }
+
+  if (hamburger && mobileNav) {
+    hamburger.addEventListener('click', e => { e.stopPropagation(); mobileOpen ? closeMobileNav() : openMobileNav(); });
+
+    mobileNav.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', closeMobileNav);
+    });
+
+    document.addEventListener('click', e => {
+      if (mobileOpen && !hamburger.contains(e.target) && !mobileNav.contains(e.target)) closeMobileNav();
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && mobileOpen) { closeMobileNav(); hamburger.focus(); }
+    });
+  }
+</script>
+
+</body>
+</html>

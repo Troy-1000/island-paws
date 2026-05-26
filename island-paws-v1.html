@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Island Paws — Bainbridge Island Dog Care</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:        #FDFBF7;
+      --cream-alt:    #F2EDE3;
+      --forest:       #243D26;
+      --forest-mid:   #3A5E3C;
+      --forest-light: #4E7A51;
+      --amber:        #B07530;
+      --amber-light:  #D4944A;
+      --ink:          #1C1814;
+      --ink-2:        #5C5044;
+      --ink-3:        #9A8B7B;
+      --border:       rgba(36,61,38,0.10);
+      --border-light: rgba(36,61,38,0.05);
+      --ease-spring:  cubic-bezier(0.32, 0.72, 0, 1);
+      --ease-expo:    cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-smooth:  cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+
+    /* ── FILM GRAIN OVERLAY ─────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0.028;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+    }
+
+    /* ══════════════════════════════════════════════════
+       NAV
+    ══════════════════════════════════════════════════ */
+    .nav {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 500;
+      width: calc(100% - 48px);
+      max-width: 880px;
+      background: rgba(253,251,247,0.84);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 10px 10px 10px 26px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      transition: box-shadow 0.5s var(--ease-expo);
+    }
+
+    .nav.scrolled {
+      box-shadow: 0 6px 40px rgba(36,61,38,0.12), 0 1px 0 rgba(36,61,38,0.06);
+    }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      color: var(--forest);
+      text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink-2);
+      text-decoration: none;
+      transition: color 0.3s var(--ease-expo);
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover { color: var(--forest); }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--forest);
+      color: #fff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 10px 10px 10px 18px;
+      border-radius: 100px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: background 0.4s var(--ease-spring), transform 0.4s var(--ease-spring);
+    }
+
+    .nav-cta:hover { background: var(--forest-mid); transform: scale(0.97); }
+    .nav-cta:active { transform: scale(0.95); }
+
+    .nav-cta .ic {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      transition: transform 0.4s var(--ease-spring);
+    }
+
+    .nav-cta:hover .ic { transform: translateX(2px) translateY(-1px) scale(1.1); }
+
+    .nav-burger {
+      display: none;
+      width: 40px;
+      height: 40px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-burger span {
+      position: absolute;
+      left: 9px;
+      height: 1.5px;
+      background: var(--ink);
+      transition: all 0.45s var(--ease-spring);
+      transform-origin: center;
+    }
+
+    .nav-burger span:first-child { width: 22px; top: 14px; }
+    .nav-burger span:last-child  { width: 15px; top: 22px; }
+
+    .nav-burger.open span:first-child { width: 20px; top: 18px; transform: rotate(45deg); }
+    .nav-burger.open span:last-child  { width: 20px; top: 18px; transform: rotate(-45deg); }
+
+    /* mobile overlay */
+    .mob-menu {
+      position: fixed;
+      inset: 0;
+      z-index: 400;
+      background: rgba(253,251,247,0.97);
+      backdrop-filter: blur(32px);
+      -webkit-backdrop-filter: blur(32px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.45s var(--ease-expo);
+    }
+
+    .mob-menu.open { opacity: 1; pointer-events: all; }
+
+    .mob-menu a {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(40px, 10vw, 64px);
+      font-weight: 400;
+      color: var(--ink);
+      text-decoration: none;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.5s var(--ease-expo), transform 0.5s var(--ease-expo), color 0.3s;
+    }
+
+    .mob-menu.open a { opacity: 1; transform: translateY(0); }
+    .mob-menu.open a:nth-child(1) { transition-delay: 0.06s; }
+    .mob-menu.open a:nth-child(2) { transition-delay: 0.11s; }
+    .mob-menu.open a:nth-child(3) { transition-delay: 0.16s; }
+    .mob-menu.open a:nth-child(4) { transition-delay: 0.21s; }
+    .mob-menu a:hover { color: var(--forest); }
+
+    /* ══════════════════════════════════════════════════
+       HERO
+    ══════════════════════════════════════════════════ */
+    .hero {
+      min-height: 100dvh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 48px;
+      padding: 128px 64px 80px;
+      max-width: 1320px;
+      margin: 0 auto;
+    }
+
+    .hero-copy { padding-right: 16px; }
+
+    /* eyebrow pill */
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(36,61,38,0.07);
+      border: 1px solid rgba(36,61,38,0.13);
+      border-radius: 100px;
+      padding: 5px 14px 5px 10px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.20em;
+      text-transform: uppercase;
+      color: var(--forest);
+      margin-bottom: 32px;
+    }
+
+    .eyebrow-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--amber);
+      flex-shrink: 0;
+    }
+
+    .hero-h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(56px, 6.5vw, 100px);
+      font-weight: 400;
+      line-height: 0.98;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+      margin-bottom: 28px;
+    }
+
+    .hero-h1 em {
+      font-style: italic;
+      color: var(--forest);
+    }
+
+    .hero-sub {
+      font-size: clamp(15px, 1.4vw, 17px);
+      font-weight: 400;
+      color: var(--ink-2);
+      line-height: 1.70;
+      max-width: 420px;
+      margin-bottom: 44px;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--forest);
+      color: #fff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 14px 12px 14px 22px;
+      border-radius: 100px;
+      text-decoration: none;
+      transition: background 0.5s var(--ease-spring), transform 0.4s var(--ease-spring);
+    }
+
+    .btn-primary:hover { background: var(--forest-mid); transform: scale(0.97); }
+    .btn-primary:active { transform: scale(0.95); }
+
+    .btn-primary .ic {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      transition: transform 0.4s var(--ease-spring);
+    }
+
+    .btn-primary:hover .ic { transform: translateX(2px) translateY(-2px) scale(1.1); }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--ink-2);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      padding-bottom: 3px;
+      border-bottom: 1px solid rgba(36,61,38,0.2);
+      transition: color 0.3s var(--ease-expo), border-color 0.3s var(--ease-expo);
+    }
+
+    .btn-ghost:hover { color: var(--forest); border-color: var(--forest); }
+
+    /* ── HERO PHOTO CASCADE ─────────────────────────── */
+    .hero-visual {
+      position: relative;
+      height: 600px;
+    }
+
+    /* double-bezel frame */
+    .fr {
+      position: absolute;
+      border-radius: 28px;
+      padding: 6px;
+      background: rgba(36,61,38,0.06);
+      border: 1px solid rgba(36,61,38,0.10);
+      will-change: transform;
+    }
+
+    .fr-inner {
+      border-radius: 23px;
+      overflow: hidden;
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.7);
+    }
+
+    .fr img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .fr-1 {
+      width: 290px;
+      height: 370px;
+      top: 0;
+      right: 70px;
+      transform: rotate(-2.5deg);
+      z-index: 3;
+    }
+
+    .fr-2 {
+      width: 230px;
+      height: 270px;
+      bottom: 30px;
+      right: 0;
+      transform: rotate(2deg);
+      z-index: 2;
+    }
+
+    .fr-3 {
+      width: 195px;
+      height: 230px;
+      bottom: 70px;
+      right: 270px;
+      transform: rotate(3deg);
+      z-index: 1;
+    }
+
+    /* floating rating badge */
+    .hero-badge {
+      position: absolute;
+      top: 210px;
+      left: 0;
+      z-index: 4;
+      background: rgba(253,251,247,0.95);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 14px 18px;
+      box-shadow: 0 12px 48px rgba(36,61,38,0.12), 0 2px 8px rgba(36,61,38,0.06);
+    }
+
+    .badge-stars { color: var(--amber); font-size: 11px; letter-spacing: 3px; margin-bottom: 3px; }
+    .badge-val   { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 300; color: var(--forest); line-height: 1; }
+    .badge-sub   { font-size: 11px; color: var(--ink-3); margin-top: 2px; font-weight: 500; }
+
+    /* ══════════════════════════════════════════════════
+       TRUST STRIP
+    ══════════════════════════════════════════════════ */
+    .trust {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 0 48px;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+    }
+
+    .trust-item {
+      flex: 1;
+      max-width: 240px;
+      text-align: center;
+      padding: 28px 20px;
+      border-right: 1px solid var(--border);
+    }
+
+    .trust-item:last-child { border-right: none; }
+
+    .trust-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 42px;
+      font-weight: 300;
+      color: var(--forest);
+      line-height: 1;
+      margin-bottom: 5px;
+    }
+
+    .trust-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ink-3);
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+    }
+
+    /* ══════════════════════════════════════════════════
+       SERVICES
+    ══════════════════════════════════════════════════ */
+    .services {
+      padding: 128px 64px;
+      max-width: 1320px;
+      margin: 0 auto;
+    }
+
+    .section-head {
+      margin-bottom: 72px;
+    }
+
+    .section-head h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(42px, 5vw, 72px);
+      font-weight: 400;
+      line-height: 1.02;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin-top: 12px;
+    }
+
+    .section-head h2 em { font-style: italic; color: var(--forest); }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    /* outer shell */
+    .svc {
+      background: rgba(36,61,38,0.04);
+      border: 1px solid var(--border);
+      border-radius: 32px;
+      padding: 6px;
+    }
+
+    .svc:nth-child(2) { margin-top: -40px; }
+    .svc:nth-child(3) { margin-top: 28px; }
+
+    /* inner core */
+    .svc-in {
+      background: var(--cream);
+      border-radius: 27px;
+      padding: 36px;
+      box-shadow: inset 0 1px 2px rgba(255,255,255,0.85);
+      transition: background 0.4s var(--ease-expo);
+      height: 100%;
+    }
+
+    .svc:hover .svc-in { background: #FEFCF8; }
+
+    .svc-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(36,61,38,0.07);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-bottom: 28px;
+    }
+
+    .svc-context {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ink-3);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 8px;
+    }
+
+    .svc-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 14px;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+    }
+
+    .svc-desc {
+      font-size: 14px;
+      color: var(--ink-2);
+      line-height: 1.70;
+      margin-bottom: 32px;
+    }
+
+    .svc-price {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .svc-price-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 40px;
+      font-weight: 300;
+      color: var(--forest);
+      line-height: 1;
+    }
+
+    .svc-price-unit {
+      font-size: 12px;
+      color: var(--ink-3);
+      font-weight: 500;
+    }
+
+    /* ══════════════════════════════════════════════════
+       ABOUT  (dark section)
+    ══════════════════════════════════════════════════ */
+    .about {
+      padding: 128px 64px;
+      background: var(--forest);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about::before {
+      content: '';
+      position: absolute;
+      bottom: -120px;
+      left: -120px;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.025);
+      pointer-events: none;
+    }
+
+    .about::after {
+      content: '';
+      position: absolute;
+      top: -80px;
+      right: -80px;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.02);
+      pointer-events: none;
+    }
+
+    .about-inner {
+      max-width: 1320px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 88px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .about .eyebrow {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.14);
+      color: rgba(255,255,255,0.65);
+    }
+
+    .about-copy h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(42px, 5vw, 68px);
+      font-weight: 400;
+      line-height: 1.03;
+      letter-spacing: -0.025em;
+      color: #fff;
+      margin: 14px 0 28px;
+    }
+
+    .about-copy h2 em { font-style: italic; color: rgba(255,255,255,0.55); }
+
+    .about-copy p {
+      font-size: 15px;
+      line-height: 1.78;
+      color: rgba(255,255,255,0.60);
+      margin-bottom: 20px;
+    }
+
+    .about-copy p:last-of-type { margin-bottom: 44px; }
+
+    .btn-outline-w {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid rgba(255,255,255,0.22);
+      color: #fff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 14px 12px 14px 22px;
+      border-radius: 100px;
+      text-decoration: none;
+      transition: background 0.4s var(--ease-spring), border-color 0.4s, transform 0.4s var(--ease-spring);
+    }
+
+    .btn-outline-w:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.40);
+      transform: scale(0.97);
+    }
+
+    .btn-outline-w .ic {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.10);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      transition: transform 0.4s var(--ease-spring);
+    }
+
+    .btn-outline-w:hover .ic { transform: translateX(2px) translateY(-2px) scale(1.1); }
+
+    /* about image */
+    .about-img {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 32px;
+      padding: 8px;
+    }
+
+    .about-img-in {
+      border-radius: 25px;
+      overflow: hidden;
+      aspect-ratio: 4/5;
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.12);
+    }
+
+    .about-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ══════════════════════════════════════════════════
+       TYPICAL DAY
+    ══════════════════════════════════════════════════ */
+    .day {
+      padding: 128px 64px;
+      max-width: 1320px;
+      margin: 0 auto;
+    }
+
+    .day-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 64px;
+    }
+
+    .day-item {
+      background: rgba(36,61,38,0.04);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 5px;
+    }
+
+    .day-in {
+      background: var(--cream);
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.85);
+    }
+
+    .day-time {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-weight: 300;
+      color: var(--forest);
+      margin-bottom: 8px;
+      line-height: 1;
+    }
+
+    .day-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 8px;
+      letter-spacing: 0.01em;
+    }
+
+    .day-desc {
+      font-size: 13px;
+      color: var(--ink-2);
+      line-height: 1.65;
+    }
+
+    /* ══════════════════════════════════════════════════
+       REVIEWS
+    ══════════════════════════════════════════════════ */
+    .reviews {
+      padding: 128px 64px;
+      background: var(--cream-alt);
+    }
+
+    .reviews-inner { max-width: 1320px; margin: 0 auto; }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      grid-template-rows: auto auto;
+      gap: 16px;
+      margin-top: 64px;
+    }
+
+    .rv {
+      background: rgba(36,61,38,0.04);
+      border: 1px solid var(--border);
+      border-radius: 32px;
+      padding: 5px;
+    }
+
+    .rv.span-2 { grid-column: 1; grid-row: 1 / span 2; }
+
+    .rv-in {
+      background: var(--cream);
+      border-radius: 28px;
+      padding: 36px;
+      height: 100%;
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.85);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .rv-stars {
+      color: var(--amber);
+      font-size: 12px;
+      letter-spacing: 3px;
+      margin-bottom: 24px;
+    }
+
+    .rv-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(19px, 2vw, 24px);
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--ink);
+      margin-bottom: 28px;
+      flex: 1;
+    }
+
+    .rv:not(.span-2) .rv-quote {
+      font-size: clamp(15px, 1.5vw, 18px);
+    }
+
+    .rv-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: auto;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .rv-av {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--forest);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .rv-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .rv-tag {
+      font-size: 11px;
+      color: var(--ink-3);
+      margin-top: 2px;
+    }
+
+    /* ══════════════════════════════════════════════════
+       CREDENTIALS STRIP
+    ══════════════════════════════════════════════════ */
+    .creds {
+      padding: 56px 64px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      align-items: center;
+      max-width: 1320px;
+      margin: 0 auto;
+    }
+
+    .cred-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(36,61,38,0.06);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 8px 16px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--ink-2);
+    }
+
+    .cred-pill span { font-size: 14px; }
+
+    /* ══════════════════════════════════════════════════
+       BOOKING CTA
+    ══════════════════════════════════════════════════ */
+    .booking {
+      padding: 144px 64px;
+      text-align: center;
+      max-width: 1320px;
+      margin: 0 auto;
+    }
+
+    .booking .eyebrow {
+      display: inline-flex;
+      margin-bottom: 24px;
+    }
+
+    .booking h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(52px, 8vw, 112px);
+      font-weight: 400;
+      line-height: 0.96;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      margin-bottom: 28px;
+    }
+
+    .booking h2 em { font-style: italic; color: var(--forest); }
+
+    .booking p {
+      font-size: 16px;
+      color: var(--ink-2);
+      max-width: 440px;
+      margin: 0 auto 48px;
+      line-height: 1.70;
+    }
+
+    .booking-btns {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    /* ══════════════════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════════════════ */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .f-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--forest);
+      text-decoration: none;
+    }
+
+    .f-copy { font-size: 12px; color: var(--ink-3); }
+
+    .f-link {
+      font-size: 12px;
+      color: var(--ink-3);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .f-link:hover { color: var(--forest); }
+
+    /* ══════════════════════════════════════════════════
+       SCROLL REVEAL
+    ══════════════════════════════════════════════════ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      filter: blur(5px);
+      transition:
+        opacity  0.95s var(--ease-expo),
+        transform 0.95s var(--ease-expo),
+        filter   0.95s var(--ease-expo);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.08s; }
+    .reveal-delay-2 { transition-delay: 0.16s; }
+    .reveal-delay-3 { transition-delay: 0.24s; }
+
+    /* ══════════════════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════════════════ */
+    @media (max-width: 960px) {
+      .nav-links, .nav-cta { display: none; }
+      .nav-burger { display: flex; }
+
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 120px 24px 64px;
+        gap: 56px;
+        text-align: center;
+      }
+
+      .hero-copy { padding-right: 0; }
+      .hero-sub { margin-left: auto; margin-right: auto; }
+      .hero-actions { justify-content: center; }
+
+      .hero-visual { height: 360px; }
+      .fr-1 { width: 210px; height: 270px; right: 24%; top: 0; }
+      .fr-2 { width: 170px; height: 210px; right: 4%; bottom: 0; }
+      .fr-3 { display: none; }
+      .hero-badge { display: none; }
+
+      .trust {
+        padding: 0 24px;
+        flex-wrap: wrap;
+      }
+
+      .trust-item {
+        flex: 1 1 calc(50% - 1px);
+        max-width: none;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .trust-item:nth-child(odd)  { border-right: 1px solid var(--border); }
+      .trust-item:nth-child(3),
+      .trust-item:nth-child(4)    { border-bottom: none; }
+
+      .services { padding: 80px 24px; }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .svc:nth-child(2),
+      .svc:nth-child(3) { margin-top: 0; }
+
+      .about { padding: 80px 24px; }
+      .about-inner { grid-template-columns: 1fr; gap: 48px; }
+
+      .day { padding: 80px 24px; }
+      .day-grid { grid-template-columns: 1fr; gap: 12px; }
+
+      .reviews { padding: 80px 24px; }
+      .reviews-grid { grid-template-columns: 1fr; }
+      .rv.span-2 { grid-column: 1; grid-row: auto; }
+
+      .creds { padding: 40px 24px; }
+
+      .booking { padding: 80px 24px; }
+
+      footer {
+        padding: 24px;
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ NAV ════════════════════════════════════════════ -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav-logo">Island Paws</a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#booking">Contact</a></li>
+  </ul>
+  <a href="#booking" class="nav-cta">
+    Book a Stay
+    <span class="ic">↗</span>
+  </a>
+  <button class="nav-burger" id="burger" aria-label="Open menu">
+    <span></span><span></span>
+  </button>
+</nav>
+
+<!-- ══ MOBILE MENU ════════════════════════════════════ -->
+<div class="mob-menu" id="mobMenu">
+  <a href="#services" onclick="closeMob()">Services</a>
+  <a href="#about"    onclick="closeMob()">About</a>
+  <a href="#reviews"  onclick="closeMob()">Reviews</a>
+  <a href="#booking"  onclick="closeMob()">Book a Stay</a>
+</div>
+
+<!-- ══ HERO ══════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-copy">
+    <span class="eyebrow">
+      <span class="eyebrow-dot"></span>
+      Bainbridge Island, WA
+    </span>
+    <h1 class="hero-h1">
+      Your dog,<br>
+      <em>part of<br>our family</em>
+    </h1>
+    <p class="hero-sub">
+      Star-rated dog boarding, day care, and house sitting — in a real family home with a large fenced yard, daily photo updates, and a 4.9&#x2605; rating from 95 happy families.
+    </p>
+    <div class="hero-actions">
+      <a href="#booking" class="btn-primary">
+        Book a Stay
+        <span class="ic">↗</span>
+      </a>
+      <a href="#services" class="btn-ghost">Explore services →</a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <!-- Z-axis cascade: 3 photos at varying rotations & depths -->
+    <div class="fr fr-1">
+      <div class="fr-inner">
+        <img
+          src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=600&q=80&fit=crop&crop=center"
+          alt="Happy golden retriever running in open field"
+          loading="eager"
+        />
+      </div>
+    </div>
+    <div class="fr fr-2">
+      <div class="fr-inner">
+        <img
+          src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80&fit=crop&crop=center"
+          alt="Dog playing in yard"
+          loading="lazy"
+        />
+      </div>
+    </div>
+    <div class="fr fr-3">
+      <div class="fr-inner">
+        <img
+          src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=400&q=80&fit=crop&crop=center"
+          alt="Two dogs together outdoors"
+          loading="lazy"
+        />
+      </div>
+    </div>
+    <!-- floating badge -->
+    <div class="hero-badge">
+      <div class="badge-stars">★★★★★</div>
+      <div class="badge-val">4.9</div>
+      <div class="badge-sub">95 reviews · Star Sitter</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TRUST STRIP ════════════════════════════════════ -->
+<div class="trust reveal">
+  <div class="trust-item">
+    <div class="trust-num">4.9★</div>
+    <div class="trust-label">Star Rating</div>
+  </div>
+  <div class="trust-item">
+    <div class="trust-num">95</div>
+    <div class="trust-label">Reviews</div>
+  </div>
+  <div class="trust-item">
+    <div class="trust-num">42</div>
+    <div class="trust-label">Repeat Clients</div>
+  </div>
+  <div class="trust-item">
+    <div class="trust-num">20 yrs</div>
+    <div class="trust-label">Experience</div>
+  </div>
+</div>
+
+<!-- ══ SERVICES ═══════════════════════════════════════ -->
+<section class="services" id="services">
+  <div class="section-head reveal">
+    <span class="eyebrow"><span class="eyebrow-dot"></span>What We Offer</span>
+    <h2>Care that fits<br><em>your life</em></h2>
+  </div>
+  <div class="services-grid">
+
+    <div class="svc reveal">
+      <div class="svc-in">
+        <div class="svc-icon">🏡</div>
+        <div class="svc-context">In our home</div>
+        <div class="svc-name">Boarding</div>
+        <p class="svc-desc">Your dog sleeps, eats, and plays as a full member of our family. Large fenced yard, cozy furniture, and our undivided care morning through night. Up to 8 pets welcomed.</p>
+        <div class="svc-price">
+          <span class="svc-price-num">$70</span>
+          <span class="svc-price-unit">per night</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="svc reveal reveal-delay-1">
+      <div class="svc-in">
+        <div class="svc-icon">☀️</div>
+        <div class="svc-context">In our home</div>
+        <div class="svc-name">Day Care</div>
+        <p class="svc-desc">Drop off in the morning, pick up in the evening. Your pup runs the yard with the pack, supervises the kitchen, and gets daily photo updates sent straight to your phone.</p>
+        <div class="svc-price">
+          <span class="svc-price-num">$50</span>
+          <span class="svc-price-unit">per day</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="svc reveal reveal-delay-2">
+      <div class="svc-in">
+        <div class="svc-icon">🔑</div>
+        <div class="svc-context">In your home</div>
+        <div class="svc-name">House Sitting</div>
+        <p class="svc-desc">We come to you. One of us — or the whole family — stays in your home so your dog never has to leave their environment, their bed, or their routine.</p>
+        <div class="svc-price">
+          <span class="svc-price-num">$140</span>
+          <span class="svc-price-unit">per night</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ ABOUT ══════════════════════════════════════════ -->
+<section class="about" id="about">
+  <div class="about-inner">
+    <div class="about-copy reveal">
+      <span class="eyebrow">
+        <span class="eyebrow-dot" style="background:rgba(255,255,255,0.45)"></span>
+        Who We Are
+      </span>
+      <h2>A family home,<br>not a <em>kennel</em></h2>
+      <p>We have a large fenced yard in a quiet neighborhood in the center of Bainbridge Island where dogs run freely while we garden, work, and care for our home and kids. When your dog stays with us, they're truly part of the family.</p>
+      <p>Trenton has had dogs his whole life — Golden Retrievers, Australian Shepherds, Great Pyrenees, Shihpoos. He loves the nuances of different breeds. Jordan brings deep empathy and devotional care to every dog in our home. Our three kids (ages 1, 8 &amp; 10) absolutely adore every visitor.</p>
+      <p>We can accommodate special needs dogs, senior dogs, and all sizes from teacup to giant. Just let us know what your pup needs.</p>
+      <a href="#booking" class="btn-outline-w">
+        Meet Us &amp; Book
+        <span class="ic">↗</span>
+      </a>
+    </div>
+    <div class="about-img reveal reveal-delay-1">
+      <div class="about-img-in">
+        <img
+          src="https://images.unsplash.com/photo-1601758174493-9cdc83d8df1d?w=800&q=80&fit=crop&crop=faces,center"
+          alt="Family with dogs in yard on Bainbridge Island"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TYPICAL DAY ════════════════════════════════════ -->
+<section class="day" id="typical-day">
+  <div class="section-head reveal">
+    <span class="eyebrow"><span class="eyebrow-dot"></span>Daily Routine</span>
+    <h2>A typical day<br><em>with the pack</em></h2>
+  </div>
+  <div class="day-grid">
+    <div class="day-item reveal">
+      <div class="day-in">
+        <div class="day-time">6 – 8 am</div>
+        <div class="day-title">Wake Up &amp; Breakfast</div>
+        <div class="day-desc">Morning potty, fresh food, and a calm start. We make breakfast for everyone — the whole pack — together.</div>
+      </div>
+    </div>
+    <div class="day-item reveal reveal-delay-1">
+      <div class="day-in">
+        <div class="day-time">8 am – 12 pm</div>
+        <div class="day-title">Outdoor Time</div>
+        <div class="day-desc">The fenced yard is theirs. Ball throwing, pack play, garden roaming — rain or shine (mostly ☀️).</div>
+      </div>
+    </div>
+    <div class="day-item reveal reveal-delay-2">
+      <div class="day-in">
+        <div class="day-time">12 – 4 pm</div>
+        <div class="day-title">Lounge &amp; Rest</div>
+        <div class="day-desc">Dogs follow us around inside, supervise the kitchen, and find their spot among dedicated dog furniture and beds.</div>
+      </div>
+    </div>
+    <div class="day-item reveal">
+      <div class="day-in">
+        <div class="day-time">4 – 6 pm</div>
+        <div class="day-title">Kids Come Home</div>
+        <div class="day-desc">Energy picks back up. Kids and dogs — the best combination for afternoon chaos and cuddles.</div>
+      </div>
+    </div>
+    <div class="day-item reveal reveal-delay-1">
+      <div class="day-in">
+        <div class="day-time">6 – 8 pm</div>
+        <div class="day-title">Dinner &amp; Wind Down</div>
+        <div class="day-desc">Evening meal, a movie, snuggles on the couch. Everyone settles in for a calm, comfortable end to the day.</div>
+      </div>
+    </div>
+    <div class="day-item reveal reveal-delay-2">
+      <div class="day-in">
+        <div class="day-time">By 10 pm</div>
+        <div class="day-title">Lights Out</div>
+        <div class="day-desc">Consistent bedtime, calm environment. Your dog always knows what comes next — just like home.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ REVIEWS ════════════════════════════════════════ -->
+<section class="reviews" id="reviews">
+  <div class="reviews-inner">
+    <div class="section-head reveal">
+      <span class="eyebrow"><span class="eyebrow-dot"></span>What Families Say</span>
+      <h2>95 reviews.<br><em>All five stars.</em></h2>
+    </div>
+    <div class="reviews-grid">
+
+      <div class="rv span-2 reveal">
+        <div class="rv-in">
+          <div class="rv-stars">★★★★★</div>
+          <p class="rv-quote">"Trenton and Jordan took incredible care of our home and our sweet Pineapple. They sent videos and photos multiple times a day. They even prepped the house for our next sitter arriving after them. Will definitely book again whenever we need dog sitting."</p>
+          <div class="rv-author">
+            <div class="rv-av">E</div>
+            <div>
+              <div class="rv-name">Emily G.</div>
+              <div class="rv-tag">House Sitting · April 2026</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rv reveal">
+        <div class="rv-in">
+          <div class="rv-stars">★★★★★</div>
+          <p class="rv-quote">"So reassuring knowing our pups are in such caring hands. Daily photos, happy dogs. Our only concern? They might not want to come back home!"</p>
+          <div class="rv-author">
+            <div class="rv-av">T</div>
+            <div>
+              <div class="rv-name">Thomas M.</div>
+              <div class="rv-tag">Boarding · April 2026</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rv reveal reveal-delay-1">
+        <div class="rv-in">
+          <div class="rv-stars">★★★★★</div>
+          <p class="rv-quote">"Blue and Pablo were so well cared for and clearly loved. Their property is perfect for dogs. Incredibly kind and communicative. We will absolutely be rebooking."</p>
+          <div class="rv-author">
+            <div class="rv-av">J</div>
+            <div>
+              <div class="rv-name">Jennifer H.</div>
+              <div class="rv-tag">Boarding · April 2026</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ CREDENTIALS ════════════════════════════════════ -->
+<div class="creds reveal">
+  <div class="cred-pill"><span>🏅</span> Star Sitter on Rover</div>
+  <div class="cred-pill"><span>✓</span> Background Checked</div>
+  <div class="cred-pill"><span>💊</span> Medication Administration</div>
+  <div class="cred-pill"><span>🐾</span> Senior Dog Experience</div>
+  <div class="cred-pill"><span>♿</span> Special Needs Dogs Welcome</div>
+  <div class="cred-pill"><span>📸</span> 90% of Stays Include Photos</div>
+  <div class="cred-pill"><span>🔄</span> 100% Response Rate</div>
+  <div class="cred-pill"><span>🐕</span> All Sizes Welcome</div>
+</div>
+
+<!-- ══ BOOKING CTA ═════════════════════════════════════ -->
+<section class="booking" id="booking">
+  <div class="reveal">
+    <span class="eyebrow"><span class="eyebrow-dot"></span>Ready to Book</span>
+    <h2>Let's take care<br>of your<br><em>good dog</em></h2>
+    <p>Check availability and book through our Rover profile, or reach out directly. We'd love to meet your pup.</p>
+    <div class="booking-btns">
+      <a href="https://www.rover.com/members/trenton-jordan-r-family-doggie-home/" target="_blank" class="btn-primary">
+        Book on Rover
+        <span class="ic">↗</span>
+      </a>
+      <a href="mailto:hello@islandpaws.com" class="btn-ghost">hello@islandpaws.com</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══════════════════════════════════════════ -->
+<footer>
+  <a href="#" class="f-logo">Island Paws</a>
+  <span class="f-copy">© 2026 Island Paws · Bainbridge Island, WA</span>
+  <a href="https://www.rover.com/members/trenton-jordan-r-family-doggie-home/" target="_blank" class="f-link">View Rover Profile →</a>
+</footer>
+
+<!-- ══ SCRIPTS ══════════════════════════════════════════ -->
+<script>
+  // Nav scroll shadow
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  // Hamburger / mobile menu
+  const burger  = document.getElementById('burger');
+  const mobMenu = document.getElementById('mobMenu');
+  let open = false;
+
+  burger.addEventListener('click', () => {
+    open = !open;
+    burger.classList.toggle('open', open);
+    mobMenu.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+
+  function closeMob() {
+    open = false;
+    burger.classList.remove('open');
+    mobMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // Scroll reveal — IntersectionObserver only, no scroll listeners
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.07, rootMargin: '0px 0px -48px 0px' });
+
+  reveals.forEach(el => io.observe(el));
+</script>
+</body>
+</html>
