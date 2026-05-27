@@ -13,3 +13,7 @@ Screenshot*.png
 c1-only.html
 kiwi images/
 fromClaudeDesign/
+
+# Temp files from PDF generation script
+images from rover/*.jpg
+*.py

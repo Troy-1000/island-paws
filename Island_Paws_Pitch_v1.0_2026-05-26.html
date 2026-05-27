@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Island Paws — Website Proposal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --paper:      #F2F4E8;
+      --paper-2:    #E6EADA;
+      --paper-deep: #D4D8C4;
+      --ink:        #1E231B;
+      --ink-2:      #52594D;
+      --ink-3:      #777C6C;
+      --sage:       #5D7256;
+      --sage-dark:  #3D5038;
+    }
+
+    html, body {
+      background: #C8CDB8;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    /* ── Page shell ─────────────────────────────────────── */
+    .page {
+      width: 816px;
+      min-height: 1056px;
+      margin: 0 auto 40px;
+      position: relative;
+      overflow: hidden;
+      background: var(--paper);
+    }
+
+    @media print {
+      html, body { background: transparent; }
+      .page {
+        margin: 0;
+        width: 100%;
+        min-height: 100vh;
+        page-break-after: always;
+        break-after: page;
+      }
+      .page:last-child { page-break-after: avoid; break-after: avoid; }
+    }
+    @page { size: letter; margin: 0; }
+
+    /* ── Page 1: Cover ──────────────────────────────────── */
+    .cover {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 64px;
+      min-height: 1056px;
+      background: var(--ink);
+    }
+
+    .cover-img {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: 44% 39%;
+    }
+
+    .cover-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(15,20,14,0.10) 0%,
+        rgba(15,20,14,0.40) 45%,
+        rgba(15,20,14,0.86) 100%
+      );
+    }
+
+    .cover-content { position: relative; z-index: 1; }
+
+    .cover-eyebrow {
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 0.20em; text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 20px;
+    }
+
+    .cover-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 80px; font-weight: 300;
+      line-height: 0.94; letter-spacing: -0.022em;
+      color: #fff;
+      margin-bottom: 22px;
+    }
+    .cover-title em { font-style: italic; }
+
+    .cover-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 22px; font-weight: 300;
+      color: rgba(255,255,255,0.75);
+      letter-spacing: -0.01em;
+      margin-bottom: 52px;
+    }
+
+    .cover-rule {
+      width: 100%; height: 1px;
+      background: rgba(255,255,255,0.18);
+      margin-bottom: 24px;
+    }
+
+    .cover-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cover-footer-left {
+      font-size: 11px; font-weight: 500;
+      color: rgba(255,255,255,0.50);
+      letter-spacing: 0.04em;
+    }
+
+    .cover-footer-right {
+      font-size: 11px; font-weight: 500;
+      color: rgba(255,255,255,0.40);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Inner pages (2–4) ──────────────────────────────── */
+    .inner {
+      display: flex;
+      flex-direction: column;
+      min-height: 1056px;
+      padding: 68px 80px 72px;
+    }
+
+    .pg-label {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--ink-3);
+      margin-bottom: 56px;
+    }
+    .pg-label-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--sage); flex-shrink: 0;
+    }
+
+    .eyebrow {
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 16px;
+    }
+
+    .headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 54px; font-weight: 300;
+      line-height: 1.0; letter-spacing: -0.022em;
+      color: var(--ink);
+      margin-bottom: 32px;
+    }
+    .headline em { font-style: italic; }
+
+    .rule {
+      width: 44px; height: 1px;
+      background: var(--sage); opacity: 0.45;
+      margin-bottom: 32px;
+    }
+
+    .body-text {
+      font-size: 14.5px; line-height: 1.80;
+      color: var(--ink-2);
+      max-width: 540px;
+    }
+
+    /* ── Page 2: Stats ──────────────────────────────────── */
+    .stats-spacer { flex: 1; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      border: 1px solid var(--paper-deep);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-top: 48px;
+    }
+
+    .stat {
+      padding: 28px 16px;
+      text-align: center;
+      border-right: 1px solid var(--paper-deep);
+    }
+    .stat:last-child { border-right: none; }
+
+    .stat-val {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 38px; font-weight: 300;
+      color: var(--sage); line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .stat-lbl {
+      font-size: 9.5px; font-weight: 600;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--ink-3); line-height: 1.35;
+    }
+
+    /* ── Page 3: Sections grid ──────────────────────────── */
+    .sections {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      margin-top: 40px;
+      flex: 1;
+    }
+
+    .sec {
+      padding: 26px 30px;
+      background: var(--paper-2);
+    }
+    .sec:nth-child(1) { border-radius: 14px 2px 2px 2px; }
+    .sec:nth-child(2) { border-radius: 2px 14px 2px 2px; }
+    .sec:nth-child(5) { border-radius: 2px 2px 2px 14px; }
+    .sec:nth-child(6) { border-radius: 2px 2px 14px 2px; }
+
+    .sec-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 21px; font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 7px;
+    }
+
+    .sec-desc {
+      font-size: 12px; color: var(--ink-3);
+      line-height: 1.60;
+    }
+
+    .url-row {
+      display: flex; align-items: center; gap: 12px;
+      margin-top: 28px;
+      padding: 12px 20px;
+      background: var(--paper-deep);
+      border-radius: 100px;
+      width: fit-content;
+    }
+
+    .url-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%; background: var(--sage); flex-shrink: 0;
+    }
+
+    .url-text {
+      font-size: 11px; font-weight: 500;
+      color: var(--ink-2); letter-spacing: 0.02em;
+    }
+
+    /* ── Page 4: Checklist ──────────────────────────────── */
+    .checklist {
+      flex: 1;
+      display: flex; flex-direction: column;
+      gap: 0;
+      margin-top: 40px;
+      border-top: 1px solid var(--paper-deep);
+    }
+
+    .chk {
+      display: flex; align-items: flex-start; gap: 18px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--paper-deep);
+    }
+
+    .chk-icon {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--sage);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 1px;
+    }
+
+    .chk-icon svg { width: 10px; height: 10px; }
+
+    .chk-title {
+      font-size: 13.5px; font-weight: 600;
+      color: var(--ink); margin-bottom: 4px;
+    }
+
+    .chk-body {
+      font-size: 12.5px; color: var(--ink-3); line-height: 1.60;
+    }
+
+    /* ── Page 5: Close ──────────────────────────────────── */
+    .close-page {
+      display: flex; flex-direction: column;
+      justify-content: space-between;
+      min-height: 1056px;
+      padding: 68px 80px 64px;
+      background: var(--sage-dark);
+    }
+
+    .close-label {
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .close-mid {
+      flex: 1; display: flex; flex-direction: column;
+      justify-content: center; padding: 64px 0 48px;
+    }
+
+    .close-eyebrow {
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 18px;
+    }
+
+    .close-headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 68px; font-weight: 300;
+      line-height: 0.96; letter-spacing: -0.022em;
+      color: #fff;
+      margin-bottom: 36px;
+    }
+    .close-headline em { font-style: italic; }
+
+    .close-body {
+      font-size: 14.5px; line-height: 1.80;
+      color: rgba(255,255,255,0.65);
+      max-width: 460px;
+      margin-bottom: 52px;
+    }
+
+    .close-contact-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px; font-weight: 400;
+      color: #fff; letter-spacing: -0.01em;
+      margin-bottom: 5px;
+    }
+
+    .close-contact-email {
+      font-size: 12.5px; font-weight: 500;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 0.03em;
+    }
+
+    .close-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.14);
+    }
+
+    .close-footer-left {
+      font-size: 10.5px; font-weight: 500;
+      color: rgba(255,255,255,0.30); letter-spacing: 0.04em;
+    }
+
+    .close-footer-url {
+      font-size: 10.5px; font-weight: 500;
+      color: rgba(255,255,255,0.40); letter-spacing: 0.02em;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ PAGE 1 · COVER ═══════════════════════════════════ -->
+  <div class="page cover">
+    <img class="cover-img" src="images from rover/original (2).webp" alt="Dogs on Bainbridge Island beach at golden hour" />
+    <div class="cover-overlay"></div>
+    <div class="cover-content">
+      <div class="cover-eyebrow">Bainbridge Island, WA &nbsp;·&nbsp; Website Proposal</div>
+      <div class="cover-title">Island<br><em>Paws.</em></div>
+      <div class="cover-sub">Your dog, at home.</div>
+      <div class="cover-rule"></div>
+      <div class="cover-footer">
+        <div class="cover-footer-left">Prepared for Trenton &amp; Jordan R.</div>
+        <div class="cover-footer-right">May 2026</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PAGE 2 · REPUTATION ══════════════════════════════ -->
+  <div class="page">
+    <div class="inner">
+      <div class="pg-label"><div class="pg-label-dot"></div>Island Paws &nbsp;·&nbsp; 01 of 04</div>
+      <div class="eyebrow">What you've built</div>
+      <div class="headline">A reputation<br>that earned<br><em>itself.</em></div>
+      <div class="rule"></div>
+      <div class="body-text">
+        You didn't build this through advertising or promotions. You built it by taking care of dogs like family, sending daily photo updates, handling every breed and every need, and showing up the same way every single time.
+        <br><br>
+        Seventy-five families have noticed. Rover has noticed. That kind of reputation deserves more than a profile page. It deserves a home of its own.
+      </div>
+      <div class="stats-spacer"></div>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-val">4.9</div>
+          <div class="stat-lbl">Star<br>Rating</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val">75</div>
+          <div class="stat-lbl">Five-Star<br>Reviews</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val">42</div>
+          <div class="stat-lbl">Repeat<br>Clients</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val">100%</div>
+          <div class="stat-lbl">Response<br>Rate</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val">&#9733;</div>
+          <div class="stat-lbl">Star Sitter<br>Status</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PAGE 3 · THE SITE ════════════════════════════════ -->
+  <div class="page">
+    <div class="inner">
+      <div class="pg-label"><div class="pg-label-dot"></div>Island Paws &nbsp;·&nbsp; 02 of 04</div>
+      <div class="eyebrow">What we built</div>
+      <div class="headline">A website that<br><em>works as hard</em><br>as you do.</div>
+      <div class="rule"></div>
+      <div class="body-text">
+        Every section was built from what we know about Island Paws: your services, your actual pricing, your real reviews, your family. Not a template. Yours.
+      </div>
+      <div class="sections">
+        <div class="sec">
+          <div class="sec-name">Services</div>
+          <div class="sec-desc">Doggy Day Care, Boarding, and House Sitting, each with your actual pricing and what sets yours apart.</div>
+        </div>
+        <div class="sec">
+          <div class="sec-name">About</div>
+          <div class="sec-desc">Your family's story. The property, the dogs, the kids, and twenty years of doing this well.</div>
+        </div>
+        <div class="sec">
+          <div class="sec-name">A Typical Day</div>
+          <div class="sec-desc">A day-in-the-life timeline showing exactly what dogs in your care experience from morning to night.</div>
+        </div>
+        <div class="sec">
+          <div class="sec-name">Reviews</div>
+          <div class="sec-desc">All 75 of your Rover reviews, embedded directly on your site and filterable by service type.</div>
+        </div>
+        <div class="sec">
+          <div class="sec-name">Rates</div>
+          <div class="sec-desc">Full pricing for every service, add-on, and scenario so clients can plan before they ever reach out.</div>
+        </div>
+        <div class="sec">
+          <div class="sec-name">Photo Gallery</div>
+          <div class="sec-desc">95 photos from your Rover profile in a full-screen gallery — every dog, every memory, all in one place.</div>
+        </div>
+      </div>
+      <div class="url-row">
+        <div class="url-dot"></div>
+        <div class="url-text">troy-1000.github.io/island-paws/Island_Paws_v1.5_2026-05-26.html</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PAGE 4 · WHAT'S INCLUDED ════════════════════════ -->
+  <div class="page">
+    <div class="inner">
+      <div class="pg-label"><div class="pg-label-dot"></div>Island Paws &nbsp;·&nbsp; 03 of 04</div>
+      <div class="eyebrow">Everything included</div>
+      <div class="headline">Built, live,<br>and <em>ready</em><br>to go.</div>
+      <div class="rule"></div>
+      <div class="body-text">
+        No subscriptions, no page builders, no lock-in. A real website, fully owned by you.
+      </div>
+      <div class="checklist">
+        <div class="chk">
+          <div class="chk-icon"><svg viewBox="0 0 10 10" fill="none"><polyline points="1.5,5.5 4,8 8.5,2.5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div>
+            <div class="chk-title">Fully designed and built — not a template</div>
+            <div class="chk-body">Custom design built around your brand, your photos, and your voice. No two pages look the same as anyone else's.</div>
+          </div>
+        </div>
+        <div class="chk">
+          <div class="chk-icon"><svg viewBox="0 0 10 10" fill="none"><polyline points="1.5,5.5 4,8 8.5,2.5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div>
+            <div class="chk-title">95 photos, organized and on display</div>
+            <div class="chk-body">Every photo from your Rover profile pulled into a full-screen, browsable gallery. The dogs speak for themselves.</div>
+          </div>
+        </div>
+        <div class="chk">
+          <div class="chk-icon"><svg viewBox="0 0 10 10" fill="none"><polyline points="1.5,5.5 4,8 8.5,2.5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div>
+            <div class="chk-title">All 75 reviews, embedded and filterable</div>
+            <div class="chk-body">Sortable by service type so prospective clients find exactly the reassurance they need before reaching out.</div>
+          </div>
+        </div>
+        <div class="chk">
+          <div class="chk-icon"><svg viewBox="0 0 10 10" fill="none"><polyline points="1.5,5.5 4,8 8.5,2.5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div>
+            <div class="chk-title">Mobile-optimized on every device</div>
+            <div class="chk-body">Looks and works great on any phone, tablet, or desktop. No pinching, no broken layouts.</div>
+          </div>
+        </div>
+        <div class="chk">
+          <div class="chk-icon"><svg viewBox="0 0 10 10" fill="none"><polyline points="1.5,5.5 4,8 8.5,2.5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div>
+            <div class="chk-title">Live on the web today</div>
+            <div class="chk-body">Already hosted and accessible at the link above. Ready for a custom domain whenever you are.</div>
+          </div>
+        </div>
+        <div class="chk">
+          <div class="chk-icon"><svg viewBox="0 0 10 10" fill="none"><polyline points="1.5,5.5 4,8 8.5,2.5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div>
+            <div class="chk-title">Ready for self-editing, no code required</div>
+            <div class="chk-body">Post-handoff, we set up a simple CMS so you can update pricing, photos, and text yourself, any time.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PAGE 5 · CLOSE ════════════════════════════════════ -->
+  <div class="page close-page">
+    <div class="close-label">Island Paws &nbsp;·&nbsp; 04 of 04</div>
+    <div class="close-mid">
+      <div class="close-eyebrow">What happens next</div>
+      <div class="close-headline">Let's make it<br><em>yours.</em></div>
+      <div class="close-body">
+        The site is built, live, and ready. The next step is making it officially yours: a domain that's easy to share, a CMS so you can keep it current yourself, and hosting that holds up long-term.
+        <br><br>
+        Take a look at the live site, show it around, and let's find a time to talk.
+      </div>
+      <div>
+        <div class="close-contact-name">Troy Yung</div>
+        <div class="close-contact-email">troy@troyyung.com</div>
+      </div>
+    </div>
+    <div class="close-footer">
+      <div class="close-footer-left">Island Paws &nbsp;·&nbsp; Bainbridge Island, WA</div>
+      <div class="close-footer-url">troy-1000.github.io/island-paws/Island_Paws_v1.5_2026-05-26.html</div>
+    </div>
+  </div>
+
+</body>
+</html>
